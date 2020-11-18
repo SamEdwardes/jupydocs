@@ -1,7 +1,7 @@
 module.exports = {
   title: 'jupydocs',
   tagline: 'Easy Python package documentation using markdown and jupyter',
-  url: 'https://jupydocs.netlify.app/',
+  url: 'https://jupydocs.netlify.app',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   favicon: 'img/favicon.ico',
@@ -39,12 +39,12 @@ module.exports = {
           title: 'Docs',
           items: [
             {
-              label: 'Style Guide',
+              label: 'Usage',
               to: 'docs/',
             },
             {
-              label: 'Second Doc',
-              to: 'docs/doc2/',
+              label: 'API Reference',
+              to: 'docs/numpydocstring/',
             },
           ],
         },
@@ -52,8 +52,8 @@ module.exports = {
           title: 'Community',
           items: [
             {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/jupydocs',
+              label: 'GitHub Issues',
+              href: 'https://github.com/SamEdwardes/jupydocs/issues',
             },
           ],
         },
@@ -68,6 +68,10 @@ module.exports = {
               label: 'GitHub',
               href: 'https://github.com/SamEdwardes/jupydocs',
             },
+            {
+              label: 'PyPi',
+              href: 'https://pypi.org/project/jupydocs/'
+            }
           ],
         },
       ],

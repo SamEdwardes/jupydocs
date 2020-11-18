@@ -3,7 +3,7 @@ import re
 import pandas as pd
 from IPython.display import Markdown
 
-# TODO: fix render methods so that it a returns in table format
+# TODO: fix render_methods so that it a returns in table format
 
 class NumpyDocString:
     """Convert function docstrings into markdown documentation.
