@@ -1,7 +1,7 @@
 module.exports = {
   title: 'jupydocs',
   tagline: 'Easy Python package documentation using markdown and jupyter',
-  url: 'https://jupydocs.netlify.app/"',
+  url: 'https://jupydocs.netlify.app/',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   favicon: 'img/favicon.ico',

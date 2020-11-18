@@ -1,15 +1,24 @@
 [tool.poetry]
 name = "jupydocs"
 version = "0.1.0"
-description = "Easy Python package documentation using jupyter"
+description = "Easy Python package documentation using markdown and jupyter"
 authors = ["SamEdwardes <edwardes.s@gmail.com>"]
 license = "MIT"
+readme = "README.md"
+repository = "https://github.com/SamEdwardes/jupydocs"
+documentation = "https://jupydocs.netlify.app/"
+keywords = ["python", "docs", "documentation"]
 
 [tool.poetry.dependencies]
 python = "^3.7"
-# need pandas 1.1. for tabluate index argmument in df.tomarkdown
+pandas = "^1.1.4"
+ipython = "^7.19.0"
+tabulate = "^0.8.7"
 
 [tool.poetry.dev-dependencies]
+jupyterlab = "^2.2.9"
+black = "^20.8b1"
+pytest = "^6.1.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
