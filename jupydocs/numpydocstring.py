@@ -17,6 +17,10 @@ class NumpyDocString:
         
     Attributes
     ----------
+    doc_index_ : list
+        TBD
+    description_ : tbd
+        tbd
     function : tbd
         tbd
     function_name : tbd
@@ -29,38 +33,13 @@ class NumpyDocString:
         tbd
     header_level : tbd
         tbd
-    description_ : tbd
-        tbd
-    parameters_ : tbd
-        tbd
-    attributes_ : tbd
-        tbd
-    examples_ : tbd
-        tbd
-    returns_ : tbd
-        tbd
-    yields_ : tbd
-        tbd
-    raises_ : tbd
-        tbd
-    notes_ : tbd
-        tbd
-    references_ : tbd
-        tbd
-    keyword_arguments_ : tbd
-        tbd
-    methods_ : tbd
-        tbd
-    see_also_ : tbd
-        tbd
-    todo_ : tbd
-        tbd
-    warnings_ : tbd
-        tbd
+        
+    Methods
+    -------
+    Work in progress
         
     Examples
     --------
-    
     Work in progress
     """
     
@@ -82,21 +61,51 @@ class NumpyDocString:
         self.numpy_section_regex = re.compile(r'-{3,}')
         self.docstring_split = re.split(numpy_section_regex, self.docstring)
         self.header_level = header_level
-        # docstring sections
+        # record keywords
+        self.section_keywords_mapping = {
+            'parameters': (['parameter', 'parameters', 'params', 'param'], self.parse_parameters),
+            'attributes': (['attribute', 'attributes'], self.parse_parameters),
+            'examples': (['example', 'examples'], self.parse_generic),
+            'returns': (['return', 'returns'], self.parse_returns),
+            'yields': (['yields', 'yield'], self.parse_returns),
+            'raises': (['raises'], self.parse_generic),
+            'notes': (['note'], self.parse_generic),
+            'references': (['reference', 'references'], self.parse_generic),
+            'keyword_arguments': (['keyword', 'kward'], self.parse_generic),
+            'methods': (['methods'], self.parse_generic),
+            'see_also': (['see also'], self.parse_generic),
+            'todo': (['to do'], self.parse_generic),
+            'warnings': (['warning',  'warns'], self.parse_generic),
+        }
+        # create an index of all docstring sections
+        self.doc_index_ = self.create_doc_index()
         self.description_ = self.parse_description()
-        self.parameters_ = self.parse_parameters(['parameter', 'parameters', 'params', 'param'])
-        self.attributes_ = self.parse_parameters(['attribute', 'attributes'])
-        self.examples_ = self.parse_generic(['example', 'examples'])
-        self.returns_ = self.parse_returns(['return', 'returns'])
-        self.yields_ = self.parse_returns(['yields', 'yield'])
-        self.raises_ = self.parse_generic(['raises'])
-        self.notes_ = self.parse_generic(['note'])
-        self.references_ = self.parse_generic(['reference', 'references'])
-        self.keyword_arguments_ = self.parse_generic(['keyword', 'kward'])
-        self.methods_ = self.parse_generic(['methods'])
-        self.see_also_ = self.parse_generic(['see also'])
-        self.todo_ = self.parse_generic(['to do'])
-        self.warnings_ = self.parse_generic(['warning',  'warns']) 
+        
+    def create_doc_index(self):
+        """Create an index of the docstring.
+
+        Returns
+        -------
+        list
+            A list of tuples, where each item in the list is a tuple with:
+            (section_name, start_line, end_line).
+        """
+        doc = self.docstring
+        doc = doc.split('\n')
+        # identify the starting index of each section
+        doc_index = []
+        for idx, txt in enumerate(doc):
+            if re.match(self.numpy_section_regex, txt.strip()):
+                doc_index.append([doc[idx - 1].strip(), idx - 1, None])
+        # identify the end index of each section
+        for idx, x in enumerate(doc_index):
+            if idx < len(doc_index) - 1:
+                doc_index[idx][2] = doc_index[idx+1][1]
+            else:
+                doc_index[idx][2] = len(doc) - 1
+            doc_index[idx] = tuple(doc_index[idx])
+        self.doc_index_ = doc_index
+        return doc_index
     
     def render_md(self, return_str=False):
         """Render the docstring into a markdown format.
@@ -111,26 +120,15 @@ class NumpyDocString:
         IPython.display.Markdown or str
             The docstring rendered into markdown or a string.
         """
-        docstring_sections = []
-        for txt in [
+        docstring_sections = [
             f'{self.header_level[0:-1]} {self.function_name}\n\n',
             self.description_,
-            self.parameters_,
-            self.attributes_,
-            self.examples_,
-            self.returns_,
-            self.yields_,
-            self.raises_,
-            self.notes_,
-            self.references_,
-            self.keyword_arguments_,
-            self.methods_,
-            self.see_also_,
-            self.todo_,
-            self.warnings_,
-        ]:
-            if txt is not None:
-                docstring_sections.append(txt)
+        ]        
+        for section_name, start, end in self.doc_index_:
+            for keywords, func in self.section_keywords_mapping.values():
+                if section_name.strip().lower() in keywords:
+                    txt = func(start, end)
+                    docstring_sections.append(txt)        
         docstring_md = ''.join(docstring_sections)
         if return_str:
             return docstring_md
@@ -161,7 +159,7 @@ class NumpyDocString:
         description = ''.join(description).strip()
         return description
         
-    def parse_parameters(self, keywords):
+    def parse_parameters(self, start, end):
         """Parse the paramters section of a docstring.
 
         Parameters
@@ -174,9 +172,6 @@ class NumpyDocString:
         [type]
             [description]
         """
-        start, end = self.find_section(self.docstring, keywords)
-        if start is None:
-            return None
         doc = self.docstring.split('\n')  
         header = doc[start].strip()
         # parse paramters into dataframe
@@ -205,7 +200,7 @@ class NumpyDocString:
         param_md = f'\n\n{self.header_level} {header}\n\n' + param_md
         return param_md
     
-    def parse_returns(self, keywords):
+    def parse_returns(self, start, end):
         """Parse the return section of a docstring
 
         Parameters
@@ -218,9 +213,6 @@ class NumpyDocString:
         [type]
             [description]
         """
-        start, end = self.find_section(self.docstring, keywords)
-        if start is None:
-            return None
         doc = self.docstring.split('\n')
         header= doc[start].strip()
         doc = doc[start+2:end]
@@ -250,7 +242,7 @@ class NumpyDocString:
         out += df.to_markdown(index=False)
         return out
             
-    def parse_generic(self, keywords):
+    def parse_generic(self, start, end):
         """Parse generic sections
 
         Parameters
@@ -263,9 +255,6 @@ class NumpyDocString:
         [type]
             [description]
         """
-        start, end = self.find_section(self.docstring, keywords)
-        if start is None:
-            return None
         doc = self.docstring.split('\n')
         header = doc[start].strip()
         doc = doc[start+2:end]
@@ -372,3 +361,44 @@ def render_class(obj, header_level='###', render_class_doc_string=True, render_i
         
     
             
+# ============================================================================
+# testing
+# ============================================================================
+
+def custom_sum(x, y):
+    """A new take on the class `sum` function.
+    
+    Does 1 + 1 always need to equal 2? Not anymore! Thanks to the `custom_sum`
+    function 1 + 1 will never equal 2 again.
+
+    Parameters
+    ----------
+    x : float
+        A number.
+    y : float
+        A number.
+
+    Returns
+    -------
+    num : Float
+        A new take on the traditional sum function. x * 2 + y * 3. Not at all
+        useful. But fun!
+        
+    Example
+    -------
+    >>> from examplepackage.example import custom_sum
+    >>> custom_sum(2, 3)
+    13
+    
+    See also
+    --------
+    You should normally use the regular python `sum` function. `custom_sum` is
+    almost never useful!
+    
+    """
+    return x * 2 + y * 3
+
+
+# doc_string = NumpyDocString(custom_sum)
+# print(doc_string.doc_index_)
+# doc_string.render_md()

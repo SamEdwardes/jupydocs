@@ -21,7 +21,72 @@ It will change!
 pip install jupydocs
 ```
 
+## Quickstart
+
 
 ```python
+from jupydocs.numpydocstring import NumpyDocString
 
+def custom_sum(x, y):
+    """A new take on the class `sum` function.
+    
+    Does 1 + 1 always need to equal 2? Not anymore! Thanks to the `custom_sum`
+    function 1 + 1 will never equal 2 again.
+
+    Parameters
+    ----------
+    x : float
+        A number.
+    y : float
+        A number.
+
+    Returns
+    -------
+    num : Float
+        A new take on the traditional sum function. x * 2 + y * 3. Not at all
+        useful. But fun!
+        
+    Example
+    -------
+    >>> from examplepackage.example import custom_sum
+    >>> custom_sum(2, 3)
+    13    
+    """
+    return x * 2 + y * 3
+
+docstring = NumpyDocString(custom_sum)
+docstring.render_md()
 ```
+
+
+
+
+## custom_sum
+
+A new take on the class `sum` function. 
+
+Does 1 + 1 always need to equal 2? Not anymore! Thanks to the `custom_sum` function 1 + 1 will never equal 2 again.
+
+### Parameters
+
+| NAME   | TYPE   | DESCRIPTION         |
+|:-------|:-------|:--------------------|
+| x      | float  | A number.           |
+| y      | float  | A number. <br></br> |
+
+### Returns
+
+| NAME   | TYPE   | DESCRIPTION                                                                                      |
+|:-------|:-------|:-------------------------------------------------------------------------------------------------|
+| num    | Float  | A new take on the traditional sum function. x * 2 + y * 3. Not at all useful. But fun! <br></br> |
+
+### Example
+
+```python
+>>> from examplepackage.example import custom_sum
+>>> custom_sum(2, 3)
+13
+```
+
+
+
