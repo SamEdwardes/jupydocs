@@ -44,7 +44,7 @@ module.exports = {
             },
             {
               label: 'API Reference',
-              to: 'docs/numpydocstring/',
+              to: 'docs/module_numpydocstring/',
             },
           ],
         },

@@ -1,6 +1,6 @@
 ---
-id: numpydocstring
-title: NumpyDocString
+id: module_numpydocstring
+title: numpydocstring module
 ---
 Currently jupydocs works only with numpy doc strings. At this time some numpydoc strings may not work as expected because the library is still under development.
 
@@ -49,7 +49,12 @@ Convert function docstrings into markdown documentation.
 Work in progress
 
 
-### Methods
+
+
+## NumpyDocString methods
+
+
+
 
 ### find_section
 

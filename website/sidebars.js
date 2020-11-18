@@ -10,7 +10,7 @@ module.exports = {
       type: 'category',
       label: 'API Reference',
       collapsed: false,
-      items: ['numpydocstring', 'other'],
+      items: ['module_numpydocstring', 'other'],
     }
   ]
 };
