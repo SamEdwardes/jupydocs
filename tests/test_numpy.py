@@ -1,3 +1,7 @@
+from IPython.display import Markdown
+from jupydocs.numpydocstring import NumpyDocString
+
+
 def custom_sum(x, y):
     """A new take on the class `sum` function.
     
@@ -29,3 +33,8 @@ def custom_sum(x, y):
     
     """
     return x * 2 + y * 3
+
+def test_numpy():
+    docstring = NumpyDocString(custom_sum)
+    assert type(docstring.render_md(True)) is str
+    assert type(docstring.render_md()) is Markdown
