@@ -334,7 +334,7 @@ class NumpyDocString:
         return section_start, section_end
     
     
-def render_class(obj, header_level='###', render_init=False, return_str=False):
+def render_class(obj, header_level='###', render_class_doc_string=True, render_init=False, return_str=False):
     """Render an entire class into docstring markdown format
 
     Parameters
@@ -357,8 +357,9 @@ def render_class(obj, header_level='###', render_init=False, return_str=False):
         if x[0:2] != '__' and x[-2] != '__':
             methods.append(x)       
     docstring = []
-    docstring.append(NumpyDocString(obj, header_level).render_md(True))
-    docstring.append(f'{header_level} Methods')
+    if render_class_doc_string:
+        docstring.append(NumpyDocString(obj, header_level).render_md(True))
+        docstring.append(f'{header_level} Methods')
     for method in methods:
         doc = NumpyDocString(getattr(obj, method), header_level + '#')
         doc = doc.render_md(True)
