@@ -1,4 +1,4 @@
-# jupydocs
+![jupydocs_logo](https://github.com/SamEdwardes/jupydocs/raw/main/website/static/img/jupydocs_logo_text.png)
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/6bc56cde-7bc0-492e-a357-7d2ca05004a3/deploy-status)](https://app.netlify.com/sites/jupydocs/deploys)
 
@@ -69,16 +69,16 @@ Does 1 + 1 always need to equal 2? Not anymore! Thanks to the `custom_sum` funct
 
 ### Parameters
 
-| NAME   | TYPE   | DESCRIPTION         |
-|:-------|:-------|:--------------------|
-| x      | float  | A number.           |
-| y      | float  | A number. <br></br> |
+| NAME   | TYPE   | DESCRIPTION   |
+|:-------|:-------|:--------------|
+| x      | float  | A number.     |
+| y      | float  | A number.     |
 
 ### Returns
 
-| NAME   | TYPE   | DESCRIPTION                                                                                      |
-|:-------|:-------|:-------------------------------------------------------------------------------------------------|
-| num    | Float  | A new take on the traditional sum function. x * 2 + y * 3. Not at all useful. But fun! <br></br> |
+| NAME   | TYPE   | DESCRIPTION                                                                            |
+|:-------|:-------|:---------------------------------------------------------------------------------------|
+| num    | Float  | A new take on the traditional sum function. x * 2 + y * 3. Not at all useful. But fun! |
 
 ### Example
 

@@ -16,7 +16,7 @@ Convert function docstrings into markdown documentation.
 | NAME         | TYPE          | DESCRIPTION                                                    |
 |:-------------|:--------------|:---------------------------------------------------------------|
 | function     | function      | A python function that has been documented using numpy styling |
-| header_level | str, optional | [description], by default '##' <br></br>                       |
+| header_level | str, optional | [description], by default '##'                                 |
 
 ### Attributes
 
@@ -29,7 +29,7 @@ Convert function docstrings into markdown documentation.
 | docstring           | tbd    | tbd           |
 | numpy_section_regex | tbd    | tbd           |
 | docstring_split     | tbd    | tbd           |
-| header_level        | tbd    | tbd <br></br> |
+| header_level        | tbd    | tbd           |
 
 ### Methods
 
@@ -63,10 +63,10 @@ A helper function that finds the section of docstring
 
 #### Parameters
 
-| NAME             | TYPE   | DESCRIPTION                                            |
-|:-----------------|:-------|:-------------------------------------------------------|
-| doc              | str    | The docstring to be parsed.                            |
-| section_keywords | list   | A list of keywords that identify the section <br></br> |
+| NAME             | TYPE   | DESCRIPTION                                  |
+|:-----------------|:-------|:---------------------------------------------|
+| doc              | str    | The docstring to be parsed.                  |
+| section_keywords | list   | A list of keywords that identify the section |
 
 #### Returns
 
@@ -80,9 +80,9 @@ Identify and clean up code blocks.
 
 #### Parameters
 
-| NAME   | TYPE   | DESCRIPTION                                                                                      |
-|:-------|:-------|:-------------------------------------------------------------------------------------------------|
-| doc    | list   | The docstring in list format, where each item in the list is a line in the doc string. <br></br> |
+| NAME   | TYPE   | DESCRIPTION                                                                            |
+|:-------|:-------|:---------------------------------------------------------------------------------------|
+| doc    | list   | The docstring in list format, where each item in the list is a line in the doc string. |
 
 #### Returns
 
@@ -106,9 +106,9 @@ Parse generic sections
 
 #### Parameters
 
-| NAME     | TYPE   | DESCRIPTION             |
-|:---------|:-------|:------------------------|
-| keywords | [type] | [description] <br></br> |
+| NAME     | TYPE   | DESCRIPTION   |
+|:---------|:-------|:--------------|
+| keywords | [type] | [description] |
 
 #### Returns
 
@@ -122,15 +122,16 @@ Parse the paramters section of a docstring.
 
 #### Parameters
 
-| NAME     | TYPE   | DESCRIPTION             |
-|:---------|:-------|:------------------------|
-| keywords | [type] | [description] <br></br> |
+| NAME   | TYPE   | DESCRIPTION                             |
+|:-------|:-------|:----------------------------------------|
+| start  | int    | The starting line of docstring section. |
+| end    | int    | The ending line of docstring section.   |
 
 #### Returns
 
-| TYPE   | DESCRIPTION   |
-|:-------|:--------------|
-| [type] | [description] |
+| TYPE   | DESCRIPTION                      |
+|:-------|:---------------------------------|
+| str    | A string in markdown formatting. |
 
 ### parse_returns
 
@@ -138,9 +139,9 @@ Parse the return section of a docstring
 
 #### Parameters
 
-| NAME     | TYPE   | DESCRIPTION             |
-|:---------|:-------|:------------------------|
-| keywords | [type] | [description] <br></br> |
+| NAME     | TYPE   | DESCRIPTION   |
+|:---------|:-------|:--------------|
+| keywords | [type] | [description] |
 
 #### Returns
 
@@ -154,9 +155,9 @@ Render the docstring into a markdown format.
 
 #### Parameters
 
-| NAME       | TYPE           | DESCRIPTION                                                                   |
-|:-----------|:---------------|:------------------------------------------------------------------------------|
-| return_str | bool, optional | If true will return a string instead of markdown, by default False. <br></br> |
+| NAME       | TYPE           | DESCRIPTION                                                         |
+|:-----------|:---------------|:--------------------------------------------------------------------|
+| return_str | bool, optional | If true will return a string instead of markdown, by default False. |
 
 #### Returns
 
@@ -175,10 +176,10 @@ Render an entire class into docstring markdown format
 
 ### Parameters
 
-| NAME       | TYPE           | DESCRIPTION                                                                   |
-|:-----------|:---------------|:------------------------------------------------------------------------------|
-| obj        | Class          | A python class object                                                         |
-| return_str | bool, optional | If true will return a string instead of markdown, by default False. <br></br> |
+| NAME       | TYPE           | DESCRIPTION                                                         |
+|:-----------|:---------------|:--------------------------------------------------------------------|
+| obj        | Class          | A python class object                                               |
+| return_str | bool, optional | If true will return a string instead of markdown, by default False. |
 
 ### Returns
 

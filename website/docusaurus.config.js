@@ -15,7 +15,7 @@ module.exports = {
       title: 'jupydocs',
       logo: {
         alt: 'jupydocs logo',
-        src: 'img/logo.svg',
+        src: 'img/jupydocs_logo.png',
       },
       items: [
         {

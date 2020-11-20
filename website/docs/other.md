@@ -1,4 +1,0 @@
----
-id: other
-title: Other
----

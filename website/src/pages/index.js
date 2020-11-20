@@ -8,32 +8,34 @@ import styles from './styles.module.css';
 
 const features = [
   {
-    title: 'Easy to Use',
-    imageUrl: 'img/undraw_docusaurus_mountain.svg',
+    title: 'Use Jupyter Notebooks',
+    imageUrl: 'img/Jupyter_logo.svg',
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Use everyone's favourite literate programing tool... Jupyter Notebooks!
+        No more copying and pasting code from the terminal to markdown. Keep
+        your code and writing all in one place.
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
-    imageUrl: 'img/undraw_docusaurus_tree.svg',
+    title: 'Use Markdown',
+    imageUrl: 'img/Markdown-mark.svg',
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        The easiest to read and write markup language. No more googling how to
+        use again.
       </>
     ),
   },
   {
-    title: 'Powered by React',
-    imageUrl: 'img/undraw_docusaurus_react.svg',
+    title: 'BYOSSG',
+    imageUrl: 'img/world-wide-web.svg',
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Bring your own static site generator (BYOSSG). jupydocs simply exports
+        your docstrings into markdown, so you can host your site using any
+        static site generator.
       </>
     ),
   },
@@ -59,11 +61,14 @@ function Home() {
   const {siteConfig = {}} = context;
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />">
+      title={''}
+      description="jupydocs - easy python package documentation using markdown and jupyter">
       <header className={clsx('hero hero--primary', styles.heroBanner)}>
         <div className="container">
-          <h1 className="hero__title">{siteConfig.title}</h1>
+          {/* <h1 className="hero__title">{siteConfig.title}</h1> */}
+          <div>
+            <img src={"img/jupydocs_logo_white_text.png"} alt={"logo"} />
+          </div>
           <p className="hero__subtitle">{siteConfig.tagline}</p>
           <div className={styles.buttons}>
             <Link
