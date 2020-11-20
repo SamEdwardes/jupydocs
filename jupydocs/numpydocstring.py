@@ -1,6 +1,7 @@
 import re
 
-import pandas as pd
+from tabulate import tabulate
+
 from IPython.display import Markdown
 
 # TODO: fix render_methods so that it a returns in table format
@@ -164,39 +165,41 @@ class NumpyDocString:
 
         Parameters
         ----------
-        keywords : [type]
-            [description]
+        start : int
+            The starting line of docstring section.
+        end : int
+            The ending line of docstring section.
 
         Returns
         -------
-        [type]
-            [description]
+        str
+            A string in markdown formatting.
         """
         doc = self.docstring.split('\n')  
         header = doc[start].strip()
         # parse paramters into dataframe
         doc = doc[start+2:end]
-        param_df = {'NAME': [], 'TYPE': [], 'DESCRIPTION': []}
+        param_table = {'NAME': [], 'TYPE': [], 'DESCRIPTION': []}
         name, param_type, description = None, None, None
         for idx, txt in enumerate(doc):
             if ' : ' in txt:
                 if name is None:
                     pass
                 else:
-                    param_df['NAME'].append(name)
-                    param_df['TYPE'].append(param_type)
-                    param_df['DESCRIPTION'].append(description.strip())
+                    param_table['NAME'].append(name)
+                    param_table['TYPE'].append(param_type)
+                    param_table['DESCRIPTION'].append(description.strip())
                 name, param_type = txt.strip().split(' : ')
                 description = ''
                 continue
             else:
-                if txt.strip() == '':
+                if txt.strip() == '' and idx < len(doc) - 1:
                     txt = '<br></br>'                
                 description += ' ' + txt.strip()  
-        param_df['NAME'].append(name)
-        param_df['TYPE'].append(param_type)
-        param_df['DESCRIPTION'].append(description.strip())
-        param_md = pd.DataFrame(param_df).to_markdown(index=False)
+        param_table['NAME'].append(name)
+        param_table['TYPE'].append(param_type)
+        param_table['DESCRIPTION'].append(description.strip())
+        param_md = tabulate(param_table, headers='keys', tablefmt="pipe")
         param_md = f'\n\n{self.header_level} {header}\n\n' + param_md
         return param_md
     
@@ -225,21 +228,23 @@ class NumpyDocString:
             name = None
             param_type = first_line[0]
         description = []
-        for txt in doc[1:]:
+        for idx, txt in enumerate(doc[1:]):
             txt = txt.strip()
-            if txt == '':
+            if txt == '' and idx < len(doc) - 2:
                 txt = '<br></br>'
             else:
                 txt = txt
             description.append(txt)
         description = ' '.join(description)
-        df = pd.DataFrame()
+        param_table = {'NAME': [], 'TYPE': [], 'DESCRIPTION': []}
         if name is not None:
-            df['NAME'] = [name]
-        df['TYPE'] = param_type,
-        df['DESCRIPTION'] = description
+            param_table['NAME'].append(name)
+        else:
+            param_table.pop('NAME', None)
+        param_table['TYPE'].append(param_type),
+        param_table['DESCRIPTION'].append(description)
         out = f'\n\n{self.header_level} {header}\n\n' 
-        out += df.to_markdown(index=False)
+        out += tabulate(param_table, headers='keys', tablefmt="pipe")
         return out
             
     def parse_generic(self, start, end):
