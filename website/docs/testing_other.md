@@ -1,59 +1,16 @@
-# from https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_numpy.html
-# -*- coding: utf-8 -*-
-"""Example NumPy style docstrings.
-
-This module demonstrates documentation as specified by the `NumPy
-Documentation HOWTO`_. Docstrings may extend over multiple lines. Sections
-are created with a section header followed by an underline of equal length.
-
-Example
--------
-Examples can be given using either the ``Example`` or ``Examples``
-sections. Sections support any reStructuredText formatting, including
-literal blocks::
-
-    $ python example_numpy.py
+---
+id: testing_other
+title: Testing on Other
+---
+Many of the functions below have been taken from the [napolean sphinx extension](https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_numpy.html#example-numpy) documentation.
 
 
-Section breaks are created with two blank lines. Section breaks are also
-implicitly created anytime a new section starts. Section bodies *may* be
-indented:
-
-Notes
------
-    This is an example of an indented section. It's like any other section,
-    but the body is indented to help it stand out from surrounding text.
-
-If a section is indented, then a section break is created by
-resuming unindented text.
-
-Attributes
-----------
-module_level_variable1 : int
-    Module level variables may be documented in either the ``Attributes``
-    section of the module docstring, or in an inline docstring immediately
-    following the variable.
-
-    Either form is acceptable, but the two should not be mixed. Choose
-    one convention to document module level variables and be consistent
-    with it.
+```python
+from jupydocs.numpydocstring import NumpyDocString
+```
 
 
-.. _NumPy Documentation HOWTO:
-   https://github.com/numpy/numpy/blob/master/doc/HOWTO_DOCUMENT.rst.txt
-
-"""
-
-module_level_variable1 = 12345
-
-module_level_variable2 = 98765
-"""int: Module level variable documented inline.
-
-The docstring may span multiple lines. The type may optionally be specified
-on the first line, separated by a colon.
-"""
-
-
+```python
 def function_with_types_in_docstring(param1, param2):
     """Example function with types documented in the docstring.
 
@@ -77,8 +34,39 @@ def function_with_types_in_docstring(param1, param2):
         https://www.python.org/dev/peps/pep-0484/
 
     """
+```
 
 
+```python
+NumpyDocString(function_with_types_in_docstring).render_md()
+```
+
+
+
+
+## function_with_types_in_docstring
+
+Example function with types documented in the docstring. 
+
+`PEP 484`_ type annotations are supported. If attribute, parameter, and return types are annotated according to `PEP 484`_, they do not need to be included in the docstring:
+
+### Parameters
+
+| NAME   | TYPE   | DESCRIPTION           |
+|:-------|:-------|:----------------------|
+| param1 | int    | The first parameter.  |
+| param2 | str    | The second parameter. |
+
+### Returns
+
+| TYPE   | DESCRIPTION                                                                                           |
+|:-------|:------------------------------------------------------------------------------------------------------|
+| bool   | True if successful, False otherwise. <br></br> .. _PEP 484: https://www.python.org/dev/peps/pep-0484/ |
+
+
+
+
+```python
 def function_with_pep484_type_annotations(param1: int, param2: str) -> bool:
     """Example function with PEP 484 type annotations.
 
@@ -98,8 +86,39 @@ def function_with_pep484_type_annotations(param1: int, param2: str) -> bool:
         True if successful, False otherwise.
 
     """
+```
 
 
+```python
+NumpyDocString(function_with_pep484_type_annotations).render_md()
+```
+
+
+
+
+## function_with_pep484_type_annotations
+
+Example function with PEP 484 type annotations. 
+
+The return type must be duplicated in the docstring to comply with the NumPy docstring style.
+
+### Parameters
+
+| NAME   | TYPE   | DESCRIPTION           |
+|:-------|:-------|:----------------------|
+| param1 |        | The first parameter.  |
+| param2 |        | The second parameter. |
+
+### Returns
+
+| TYPE   | DESCRIPTION                          |
+|:-------|:-------------------------------------|
+| bool   | True if successful, False otherwise. |
+
+
+
+
+```python
 def module_level_function(param1, param2=None, *args, **kwargs):
     """This is an example of a module level function.
 
@@ -162,8 +181,60 @@ def module_level_function(param1, param2=None, *args, **kwargs):
     if param1 == param2:
         raise ValueError('param1 may not be equal to param2')
     return True
+```
 
 
+```python
+NumpyDocString(module_level_function).render_md()
+```
+
+
+
+
+## module_level_function
+
+This is an example of a module level function. 
+
+Function parameters should be documented in the ``Parameters`` section. The name of each parameter is required. The type and description of each parameter is optional, but should be included if not obvious. 
+
+If \*args or \*\*kwargs are accepted, they should be listed as ``*args`` and ``**kwargs``. 
+
+The format for a parameter is:: 
+
+name : type description 
+
+The description may span multiple lines. Following lines should be indented to match the first line of the description. The ": type" is optional. 
+
+Multiple paragraphs are supported in parameter descriptions.
+
+### Parameters
+
+| NAME     | TYPE                 | DESCRIPTION                    |
+|:---------|:---------------------|:-------------------------------|
+| param1   | int                  | The first parameter.           |
+| param2   | :obj:`str`, optional | The second parameter.          |
+| *args    |                      | Variable length argument list. |
+| **kwargs |                      | Arbitrary keyword arguments.   |
+
+### Returns
+
+| TYPE   | DESCRIPTION                                                                                                                                                                                                                                                                                                                                                                            |
+|:-------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| bool   | True if successful, False otherwise. <br></br> The return type is not optional. The ``Returns`` section may span multiple lines and paragraphs. Following lines should be indented to match the first line of the description. <br></br> The ``Returns`` section supports any reStructuredText formatting, including literal blocks:: <br></br> { 'param1': param1, 'param2': param2 } |
+
+### Raises
+
+AttributeError
+The ``Raises`` section is a list of all exceptions
+that are relevant to the interface.
+ValueError
+If `param2` is equal to `param1`.
+
+
+
+
+
+```python
 def example_generator(n):
     """Generators have a ``Yields`` section instead of a ``Returns`` section.
 
@@ -188,8 +259,48 @@ def example_generator(n):
     """
     for i in range(n):
         yield i
+```
 
 
+```python
+NumpyDocString(example_generator).render_md()
+```
+
+
+
+
+## example_generator
+
+Generators have a ``Yields`` section instead of a ``Returns`` section.
+
+### Parameters
+
+| NAME   | TYPE   | DESCRIPTION                                                  |
+|:-------|:-------|:-------------------------------------------------------------|
+| n      | int    | The upper limit of the range to generate, from 0 to `n` - 1. |
+
+### Yields
+
+| TYPE   | DESCRIPTION                                   |
+|:-------|:----------------------------------------------|
+| int    | The next number in the range of 0 to `n` - 1. |
+
+### Examples
+
+Examples should be written in doctest format, and should illustrate how
+to use the function.
+
+```python
+>>> print([i for i in example_generator(4)])
+[0, 1, 2, 3]
+
+```
+
+
+
+
+
+```python
 class ExampleError(Exception):
     """Exceptions are documented in the same way as classes.
 
@@ -222,8 +333,47 @@ class ExampleError(Exception):
     def __init__(self, msg, code):
         self.msg = msg
         self.code = code
+```
 
 
+```python
+NumpyDocString(ExampleError).render_md()
+```
+
+
+
+
+## ExampleError
+
+Exceptions are documented in the same way as classes. 
+
+The __init__ method may be documented in either the class level docstring, or as a docstring on the __init__ method itself. 
+
+Either form is acceptable, but the two should not be mixed. Choose one convention to document the __init__ method and be consistent with it.
+
+### Note
+
+Do not include the `self` parameter in the ``Parameters`` section.
+
+
+### Parameters
+
+| NAME   | TYPE                 | DESCRIPTION                                     |
+|:-------|:---------------------|:------------------------------------------------|
+| msg    | str                  | Human readable string describing the exception. |
+| code   | :obj:`int`, optional | Numeric error code.                             |
+
+### Attributes
+
+| NAME   | TYPE   | DESCRIPTION                                     |
+|:-------|:-------|:------------------------------------------------|
+| msg    | str    | Human readable string describing the exception. |
+| code   | int    | Numeric error code.                             |
+
+
+
+
+```python
 class ExampleClass(object):
     """The summary line for a class docstring should fit on one line.
 
@@ -355,3 +505,29 @@ class ExampleClass(object):
 
     def _private_without_docstring(self):
         pass
+```
+
+
+```python
+NumpyDocString(ExampleClass).render_md()
+```
+
+
+
+
+## ExampleClass
+
+The summary line for a class docstring should fit on one line. 
+
+If the class has public attributes, they may be documented here in an ``Attributes`` section and follow the same formatting as a function's ``Args`` section. Alternatively, attributes may be documented inline with the attribute's declaration (see __init__ method below). 
+
+Properties created with the ``@property`` decorator should be documented in the property's getter method.
+
+### Attributes
+
+| NAME   | TYPE                 | DESCRIPTION             |
+|:-------|:---------------------|:------------------------|
+| attr1  | str                  | Description of `attr1`. |
+| attr2  | :obj:`int`, optional | Description of `attr2`. |
+
+

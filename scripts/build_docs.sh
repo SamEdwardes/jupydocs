@@ -25,3 +25,11 @@ jupyter nbconvert --to markdown --execute website/docs/usage_jupydocs_work_flow.
 #   API REFERENCE
 echo "-------------"
 jupyter nbconvert --to markdown --execute website/docs/api_reference_numpy_module.ipynb --no-input
+
+#   TESTING
+echo "-------------"
+jupyter nbconvert --to markdown --execute website/docs/testing_numpy.ipynb
+echo "-------------"
+jupyter nbconvert --to markdown --execute website/docs/testing_pandas.ipynb
+echo "-------------"
+jupyter nbconvert --to markdown --execute website/docs/testing_other.ipynb

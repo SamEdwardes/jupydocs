@@ -19,6 +19,25 @@ module.exports = {
       items: [
         'module_numpydocstring'
       ]
+    },
+    {
+      type: 'category',
+      label: 'Contributing',
+      collapsed: false,
+      items: [
+        'how_to_contribute'
+      ]
+    },
+    {
+      type: 'category',
+      label: 'Testing',
+      collapsed: false,
+      items: [
+        'testing_introduction',
+        'testing_pandas',
+        'testing_numpy',
+        'testing_other'
+      ]
     }
   ]
 };

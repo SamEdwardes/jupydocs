@@ -1,8 +1,7 @@
 import re
 
-from tabulate import tabulate
-
 from IPython.display import Markdown
+from tabulate import tabulate
 
 # TODO: fix render_methods so that it a returns in table format
 
@@ -179,26 +178,53 @@ class NumpyDocString:
         header = doc[start].strip()
         # parse paramters into dataframe
         doc = doc[start+2:end]
+        num_leading_white_spaces = []
         param_table = {'NAME': [], 'TYPE': [], 'DESCRIPTION': []}
-        name, param_type, description = None, None, None
+        # setting name, type, and description to none 
+        param_name = None
+        param_type = None
+        param_description = ''
+        # loop through...
         for idx, txt in enumerate(doc):
-            if ' : ' in txt:
-                if name is None:
-                    pass
-                else:
-                    param_table['NAME'].append(name)
-                    param_table['TYPE'].append(param_type)
-                    param_table['DESCRIPTION'].append(description.strip())
-                name, param_type = txt.strip().split(' : ')
-                description = ''
+            
+            num_leading_white_spaces.append(count_white_space(txt))
+            
+            if txt == '':
                 continue
+            
+            # parse the description
+            if num_leading_white_spaces[idx] >= num_leading_white_spaces[idx-1] and idx > 0 and ' : ' not in txt:
+                if doc[idx-1].strip() == '':
+                    txt = '<div><br></br></div>' + txt
+                param_description += txt.strip() + ' '
+                continue
+            
+            # parse paramater name and type
+            if ' : ' in txt:
+                param_name, param_type = txt.split(' : ')
+            elif idx == 0:
+                param_name = txt.strip()
+                param_type = None
+            elif num_leading_white_spaces[idx] < num_leading_white_spaces[idx - 1]:
+                param_name = txt.strip()
+                param_type = None
             else:
-                if txt.strip() == '' and idx < len(doc) - 1:
-                    txt = '<br></br>'                
-                description += ' ' + txt.strip()  
-        param_table['NAME'].append(name)
-        param_table['TYPE'].append(param_type)
-        param_table['DESCRIPTION'].append(description.strip())
+                pass
+                
+            # add data to the parameters table
+            param_table['NAME'].append(param_name)
+            param_table['TYPE'].append(param_type)
+            if param_description is not '':
+                param_description = remove_trailing_br(param_description)
+                param_table['DESCRIPTION'].append(param_description)
+                param_description = ''
+                
+        # add the last parameter description
+        if param_description is not '':
+            param_description = remove_trailing_br(param_description)
+            param_table['DESCRIPTION'].append(param_description)
+
+        # convert the table to a markdown format
         param_md = tabulate(param_table, headers='keys', tablefmt="pipe")
         param_md = f'\n\n{self.header_level} {header}\n\n' + param_md
         return param_md
@@ -363,6 +389,36 @@ def render_class(obj, header_level='###', render_class_doc_string=True, render_i
         return docstring
     else:
         return Markdown(docstring)
+    
+    
+def count_white_space(x):
+    """A helper function to count white space
+    
+    Counts the number of leading white spaces in a string.
+
+    Parameters
+    ----------
+    x : str
+        The string to count the number of leading white spaces in.
+
+    Returns
+    -------
+    int
+        The number of leading white spaces
+    """
+    num = 0
+    for i in x:
+        if i == ' ':
+            num += 1
+        else:
+            return num
+    return num
+
+
+def remove_trailing_br(x):
+    if x[-15:].strip() == '<div><br></br></div>':
+        x = x[0:len(x)-15]
+    return x
         
     
             
@@ -370,40 +426,26 @@ def render_class(obj, header_level='###', render_class_doc_string=True, render_i
 # testing
 # ============================================================================
 
-def custom_sum(x, y):
-    """A new take on the class `sum` function.
-    
-    Does 1 + 1 always need to equal 2? Not anymore! Thanks to the `custom_sum`
-    function 1 + 1 will never equal 2 again.
-
-    Parameters
-    ----------
-    x : float
-        A number.
-    y : float
-        A number.
-
-    Returns
-    -------
-    num : Float
-        A new take on the traditional sum function. x * 2 + y * 3. Not at all
-        useful. But fun!
+# def silly_function(name):
+#     """
+#     Parameters
+#     ----------
+#     name : str
+#         The name of a person
         
-    Example
-    -------
-    >>> from examplepackage.example import custom_sum
-    >>> custom_sum(2, 3)
-    13
-    
-    See also
-    --------
-    You should normally use the regular python `sum` function. `custom_sum` is
-    almost never useful!
-    
-    """
-    return x * 2 + y * 3
+        
+#     Returns
+#     -------
+#     str
+#         Let the person know they are silly!
+#     """
+#     return(f'Hey {name}, you are silly!')
 
 
-# doc_string = NumpyDocString(custom_sum)
-# print(doc_string.doc_index_)
+# doc_string = NumpyDocString(silly_function)
+# doc_string.render_md()
+# print(doc_string.render_md(True))
+
+# import pandas as pd
+# doc_string = NumpyDocString(pd.concat)
 # doc_string.render_md()

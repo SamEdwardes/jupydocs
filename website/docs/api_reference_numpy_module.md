@@ -4,6 +4,8 @@ title: numpydocstring module
 ---
 Currently jupydocs works only with numpy doc strings. At this time some numpydoc strings may not work as expected because the library is still under development.
 
+All markdown documentation below was generated using jupydocs.
+
 
 
 

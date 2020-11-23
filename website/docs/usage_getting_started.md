@@ -27,7 +27,6 @@ def silly_function(name):
     name : str
         The name of a person
         
-        
     Returns
     -------
     str
@@ -50,9 +49,9 @@ NumpyDocString(silly_function).render_md()
 
 ### Parameters
 
-| NAME   | TYPE   | DESCRIPTION                    |
-|:-------|:-------|:-------------------------------|
-| name   | str    | The name of a person <br></br> |
+| NAME   | TYPE   | DESCRIPTION          |
+|:-------|:-------|:---------------------|
+| name   | str    | The name of a person |
 
 ### Returns
 
@@ -60,4 +59,26 @@ NumpyDocString(silly_function).render_md()
 |:-------|:------------------------------------|
 | str    | Let the person know they are silly! |
 
+
+
+
+```python
+print(NumpyDocString(silly_function).render_md(return_str=True))
+```
+
+    ## silly_function
+    
+    
+    
+    ### Parameters
+    
+    | NAME   | TYPE   | DESCRIPTION          |
+    |:-------|:-------|:---------------------|
+    | name   | str    | The name of a person |
+    
+    ### Returns
+    
+    | TYPE   | DESCRIPTION                         |
+    |:-------|:------------------------------------|
+    | str    | Let the person know they are silly! |
 

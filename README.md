@@ -90,3 +90,37 @@ Does 1 + 1 always need to equal 2? Not anymore! Thanks to the `custom_sum` funct
 
 
 
+
+
+```python
+print(docstring.render_md(return_str=True))
+```
+
+    ## custom_sum
+    
+    A new take on the class `sum` function. 
+    
+    Does 1 + 1 always need to equal 2? Not anymore! Thanks to the `custom_sum` function 1 + 1 will never equal 2 again.
+    
+    ### Parameters
+    
+    | NAME   | TYPE   | DESCRIPTION   |
+    |:-------|:-------|:--------------|
+    | x      | float  | A number.     |
+    | y      | float  | A number.     |
+    
+    ### Returns
+    
+    | NAME   | TYPE   | DESCRIPTION                                                                            |
+    |:-------|:-------|:---------------------------------------------------------------------------------------|
+    | num    | Float  | A new take on the traditional sum function. x * 2 + y * 3. Not at all useful. But fun! |
+    
+    ### Example
+    
+    ```python
+    >>> from examplepackage.example import custom_sum
+    >>> custom_sum(2, 3)
+    13
+    ```
+    
+
