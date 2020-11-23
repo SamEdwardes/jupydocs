@@ -4,7 +4,7 @@ title: Documenting Functions
 ---
 jupydocs can be used to document any function that is compliant with numpy docstring standards (see [numpy docstring guide](https://numpydoc.readthedocs.io/en/latest/format.html)). 
 
-To use jupydocs you pass your function into the `NumpyDocString` class, and then use the `render_md` function to output the markdown.
+To use jupydocs you pass your function into the `NumpyDocString` class, and then use the `render_md` method to output the markdown.
 
 
 ```python
