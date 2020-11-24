@@ -571,3 +571,740 @@ ValueError: Indexes have overlapping values: ['a']
 
 
 
+
+## `pd.melt.__doc__`
+
+
+```python
+print(pd.melt.__doc__)
+```
+
+    
+    Unpivot a DataFrame from wide to long format, optionally leaving identifiers set.
+    
+    This function is useful to massage a DataFrame into a format where one
+    or more columns are identifier variables (`id_vars`), while all other
+    columns, considered measured variables (`value_vars`), are "unpivoted" to
+    the row axis, leaving just two non-identifier columns, 'variable' and
+    'value'.
+    
+    Parameters
+    ----------
+    id_vars : tuple, list, or ndarray, optional
+        Column(s) to use as identifier variables.
+    value_vars : tuple, list, or ndarray, optional
+        Column(s) to unpivot. If not specified, uses all columns that
+        are not set as `id_vars`.
+    var_name : scalar
+        Name to use for the 'variable' column. If None it uses
+        ``frame.columns.name`` or 'variable'.
+    value_name : scalar, default 'value'
+        Name to use for the 'value' column.
+    col_level : int or str, optional
+        If columns are a MultiIndex then use this level to melt.
+    ignore_index : bool, default True
+        If True, original index is ignored. If False, the original index is retained.
+        Index labels will be repeated as necessary.
+    
+        .. versionadded:: 1.1.0
+    
+    Returns
+    -------
+    DataFrame
+        Unpivoted DataFrame.
+    
+    See Also
+    --------
+    DataFrame.melt : Identical method.
+    pivot_table : Create a spreadsheet-style pivot table as a DataFrame.
+    DataFrame.pivot : Return reshaped DataFrame organized
+        by given index / column values.
+    DataFrame.explode : Explode a DataFrame from list-like
+            columns to long format.
+    
+    Examples
+    --------
+    >>> df = pd.DataFrame({'A': {0: 'a', 1: 'b', 2: 'c'},
+    ...                    'B': {0: 1, 1: 3, 2: 5},
+    ...                    'C': {0: 2, 1: 4, 2: 6}})
+    >>> df
+       A  B  C
+    0  a  1  2
+    1  b  3  4
+    2  c  5  6
+    
+    >>> pd.melt(df, id_vars=['A'], value_vars=['B'])
+       A variable  value
+    0  a        B      1
+    1  b        B      3
+    2  c        B      5
+    
+    >>> pd.melt(df, id_vars=['A'], value_vars=['B', 'C'])
+       A variable  value
+    0  a        B      1
+    1  b        B      3
+    2  c        B      5
+    3  a        C      2
+    4  b        C      4
+    5  c        C      6
+    
+    The names of 'variable' and 'value' columns can be customized:
+    
+    >>> pd.melt(df, id_vars=['A'], value_vars=['B'],
+    ...         var_name='myVarname', value_name='myValname')
+       A myVarname  myValname
+    0  a         B          1
+    1  b         B          3
+    2  c         B          5
+    
+    Original index values can be kept around:
+    
+    >>> pd.melt(df, id_vars=['A'], value_vars=['B', 'C'], ignore_index=False)
+       A variable  value
+    0  a        B      1
+    1  b        B      3
+    2  c        B      5
+    0  a        C      2
+    1  b        C      4
+    2  c        C      6
+    
+    If you have multi-index columns:
+    
+    >>> df.columns = [list('ABC'), list('DEF')]
+    >>> df
+       A  B  C
+       D  E  F
+    0  a  1  2
+    1  b  3  4
+    2  c  5  6
+    
+    >>> pd.melt(df, col_level=0, id_vars=['A'], value_vars=['B'])
+       A variable  value
+    0  a        B      1
+    1  b        B      3
+    2  c        B      5
+    
+    >>> pd.melt(df, id_vars=[('A', 'D')], value_vars=[('B', 'E')])
+      (A, D) variable_0 variable_1  value
+    0      a          B          E      1
+    1      b          B          E      3
+    2      c          B          E      5
+    
+
+
+
+```python
+NumpyDocString(pd.melt).render_md()
+```
+
+
+
+
+## melt
+
+Unpivot a DataFrame from wide to long format, optionally leaving identifiers set. 
+
+This function is useful to massage a DataFrame into a format where one or more columns are identifier variables (`id_vars`), while all other columns, considered measured variables (`value_vars`), are "unpivoted" to the row axis, leaving just two non-identifier columns, 'variable' and 'value'.
+
+### Parameters
+
+| NAME         | TYPE                              | DESCRIPTION                                                                                                                                                               |
+|:-------------|:----------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| id_vars      | tuple, list, or ndarray, optional | Column(s) to use as identifier variables.                                                                                                                                 |
+| value_vars   | tuple, list, or ndarray, optional | Column(s) to unpivot. If not specified, uses all columns that are not set as `id_vars`.                                                                                   |
+| var_name     | scalar                            | Name to use for the 'variable' column. If None it uses ``frame.columns.name`` or 'variable'.                                                                              |
+| value_name   | scalar, default 'value'           | Name to use for the 'value' column.                                                                                                                                       |
+| col_level    | int or str, optional              | If columns are a MultiIndex then use this level to melt.                                                                                                                  |
+| ignore_index | bool, default True                | If True, original index is ignored. If False, the original index is retained. Index labels will be repeated as necessary. <div><br></br></div>    .. versionadded:: 1.1.0 |
+
+### Returns
+
+| TYPE      | DESCRIPTION          |
+|:----------|:---------------------|
+| DataFrame | Unpivoted DataFrame. |
+
+### See Also
+
+DataFrame.melt : Identical method.
+pivot_table : Create a spreadsheet-style pivot table as a DataFrame.
+DataFrame.pivot : Return reshaped DataFrame organized
+by given index / column values.
+DataFrame.explode : Explode a DataFrame from list-like
+columns to long format.
+
+
+### Examples
+
+```python
+>>> df = pd.DataFrame({'A': {0: 'a', 1: 'b', 2: 'c'},
+...                    'B': {0: 1, 1: 3, 2: 5},
+...                    'C': {0: 2, 1: 4, 2: 6}})
+>>> df
+A  B  C
+0  a  1  2
+1  b  3  4
+2  c  5  6
+
+```
+
+```python
+>>> pd.melt(df, id_vars=['A'], value_vars=['B'])
+A variable  value
+0  a        B      1
+1  b        B      3
+2  c        B      5
+
+```
+
+```python
+>>> pd.melt(df, id_vars=['A'], value_vars=['B', 'C'])
+A variable  value
+0  a        B      1
+1  b        B      3
+2  c        B      5
+3  a        C      2
+4  b        C      4
+5  c        C      6
+
+```
+
+The names of 'variable' and 'value' columns can be customized:
+
+```python
+>>> pd.melt(df, id_vars=['A'], value_vars=['B'],
+...         var_name='myVarname', value_name='myValname')
+A myVarname  myValname
+0  a         B          1
+1  b         B          3
+2  c         B          5
+
+```
+
+Original index values can be kept around:
+
+```python
+>>> pd.melt(df, id_vars=['A'], value_vars=['B', 'C'], ignore_index=False)
+A variable  value
+0  a        B      1
+1  b        B      3
+2  c        B      5
+0  a        C      2
+1  b        C      4
+2  c        C      6
+
+```
+
+If you have multi-index columns:
+
+```python
+>>> df.columns = [list('ABC'), list('DEF')]
+>>> df
+A  B  C
+D  E  F
+0  a  1  2
+1  b  3  4
+2  c  5  6
+
+```
+
+```python
+>>> pd.melt(df, col_level=0, id_vars=['A'], value_vars=['B'])
+A variable  value
+0  a        B      1
+1  b        B      3
+2  c        B      5
+
+```
+
+```python
+>>> pd.melt(df, id_vars=[('A', 'D')], value_vars=[('B', 'E')])
+(A, D) variable_0 variable_1  value
+0      a          B          E      1
+1      b          B          E      3
+2      c          B          E      5
+```
+
+
+
+
+## `pd.isna.__doc__`
+
+
+```python
+print(pd.isna.__doc__)
+```
+
+    
+        Detect missing values for an array-like object.
+    
+        This function takes a scalar or array-like object and indicates
+        whether values are missing (``NaN`` in numeric arrays, ``None`` or ``NaN``
+        in object arrays, ``NaT`` in datetimelike).
+    
+        Parameters
+        ----------
+        obj : scalar or array-like
+            Object to check for null or missing values.
+    
+        Returns
+        -------
+        bool or array-like of bool
+            For scalar input, returns a scalar boolean.
+            For array input, returns an array of boolean indicating whether each
+            corresponding element is missing.
+    
+        See Also
+        --------
+        notna : Boolean inverse of pandas.isna.
+        Series.isna : Detect missing values in a Series.
+        DataFrame.isna : Detect missing values in a DataFrame.
+        Index.isna : Detect missing values in an Index.
+    
+        Examples
+        --------
+        Scalar arguments (including strings) result in a scalar boolean.
+    
+        >>> pd.isna('dog')
+        False
+    
+        >>> pd.isna(pd.NA)
+        True
+    
+        >>> pd.isna(np.nan)
+        True
+    
+        ndarrays result in an ndarray of booleans.
+    
+        >>> array = np.array([[1, np.nan, 3], [4, 5, np.nan]])
+        >>> array
+        array([[ 1., nan,  3.],
+               [ 4.,  5., nan]])
+        >>> pd.isna(array)
+        array([[False,  True, False],
+               [False, False,  True]])
+    
+        For indexes, an ndarray of booleans is returned.
+    
+        >>> index = pd.DatetimeIndex(["2017-07-05", "2017-07-06", None,
+        ...                           "2017-07-08"])
+        >>> index
+        DatetimeIndex(['2017-07-05', '2017-07-06', 'NaT', '2017-07-08'],
+                      dtype='datetime64[ns]', freq=None)
+        >>> pd.isna(index)
+        array([False, False,  True, False])
+    
+        For Series and DataFrame, the same type is returned, containing booleans.
+    
+        >>> df = pd.DataFrame([['ant', 'bee', 'cat'], ['dog', None, 'fly']])
+        >>> df
+             0     1    2
+        0  ant   bee  cat
+        1  dog  None  fly
+        >>> pd.isna(df)
+               0      1      2
+        0  False  False  False
+        1  False   True  False
+    
+        >>> pd.isna(df[1])
+        0    False
+        1     True
+        Name: 1, dtype: bool
+        
+
+
+
+```python
+NumpyDocString(pd.isna).render_md()
+```
+
+
+
+
+## isna
+
+Detect missing values for an array-like object. 
+
+This function takes a scalar or array-like object and indicates whether values are missing (``NaN`` in numeric arrays, ``None`` or ``NaN`` in object arrays, ``NaT`` in datetimelike).
+
+### Parameters
+
+| NAME   | TYPE                 | DESCRIPTION                                 |
+|:-------|:---------------------|:--------------------------------------------|
+| obj    | scalar or array-like | Object to check for null or missing values. |
+
+### Returns
+
+| TYPE                       | DESCRIPTION                                                                                                                                        |
+|:---------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------|
+| bool or array-like of bool | For scalar input, returns a scalar boolean. For array input, returns an array of boolean indicating whether each corresponding element is missing. |
+
+### See Also
+
+notna : Boolean inverse of pandas.isna.
+Series.isna : Detect missing values in a Series.
+DataFrame.isna : Detect missing values in a DataFrame.
+Index.isna : Detect missing values in an Index.
+
+
+### Examples
+
+Scalar arguments (including strings) result in a scalar boolean.
+
+```python
+>>> pd.isna('dog')
+False
+
+```
+
+```python
+>>> pd.isna(pd.NA)
+True
+
+```
+
+```python
+>>> pd.isna(np.nan)
+True
+
+```
+
+ndarrays result in an ndarray of booleans.
+
+```python
+>>> array = np.array([[1, np.nan, 3], [4, 5, np.nan]])
+>>> array
+array([[ 1., nan,  3.],
+[ 4.,  5., nan]])
+>>> pd.isna(array)
+array([[False,  True, False],
+[False, False,  True]])
+
+```
+
+For indexes, an ndarray of booleans is returned.
+
+```python
+>>> index = pd.DatetimeIndex(["2017-07-05", "2017-07-06", None,
+...                           "2017-07-08"])
+>>> index
+DatetimeIndex(['2017-07-05', '2017-07-06', 'NaT', '2017-07-08'],
+dtype='datetime64[ns]', freq=None)
+>>> pd.isna(index)
+array([False, False,  True, False])
+
+```
+
+For Series and DataFrame, the same type is returned, containing booleans.
+
+```python
+>>> df = pd.DataFrame([['ant', 'bee', 'cat'], ['dog', None, 'fly']])
+>>> df
+0     1    2
+0  ant   bee  cat
+1  dog  None  fly
+>>> pd.isna(df)
+0      1      2
+0  False  False  False
+1  False   True  False
+
+```
+
+```python
+>>> pd.isna(df[1])
+0    False
+1     True
+Name: 1, dtype: bool
+```
+
+
+
+
+## `pd.to_datetime.__doc__`
+
+
+```python
+print(pd.to_datetime.__doc__)
+```
+
+    
+        Convert argument to datetime.
+    
+        Parameters
+        ----------
+        arg : int, float, str, datetime, list, tuple, 1-d array, Series, DataFrame/dict-like
+            The object to convert to a datetime.
+        errors : {'ignore', 'raise', 'coerce'}, default 'raise'
+            - If 'raise', then invalid parsing will raise an exception.
+            - If 'coerce', then invalid parsing will be set as NaT.
+            - If 'ignore', then invalid parsing will return the input.
+        dayfirst : bool, default False
+            Specify a date parse order if `arg` is str or its list-likes.
+            If True, parses dates with the day first, eg 10/11/12 is parsed as
+            2012-11-10.
+            Warning: dayfirst=True is not strict, but will prefer to parse
+            with day first (this is a known bug, based on dateutil behavior).
+        yearfirst : bool, default False
+            Specify a date parse order if `arg` is str or its list-likes.
+    
+            - If True parses dates with the year first, eg 10/11/12 is parsed as
+              2010-11-12.
+            - If both dayfirst and yearfirst are True, yearfirst is preceded (same
+              as dateutil).
+    
+            Warning: yearfirst=True is not strict, but will prefer to parse
+            with year first (this is a known bug, based on dateutil behavior).
+        utc : bool, default None
+            Return UTC DatetimeIndex if True (converting any tz-aware
+            datetime.datetime objects as well).
+        format : str, default None
+            The strftime to parse time, eg "%d/%m/%Y", note that "%f" will parse
+            all the way up to nanoseconds.
+            See strftime documentation for more information on choices:
+            https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior.
+        exact : bool, True by default
+            Behaves as:
+            - If True, require an exact format match.
+            - If False, allow the format to match anywhere in the target string.
+    
+        unit : str, default 'ns'
+            The unit of the arg (D,s,ms,us,ns) denote the unit, which is an
+            integer or float number. This will be based off the origin.
+            Example, with unit='ms' and origin='unix' (the default), this
+            would calculate the number of milliseconds to the unix epoch start.
+        infer_datetime_format : bool, default False
+            If True and no `format` is given, attempt to infer the format of the
+            datetime strings based on the first non-NaN element,
+            and if it can be inferred, switch to a faster method of parsing them.
+            In some cases this can increase the parsing speed by ~5-10x.
+        origin : scalar, default 'unix'
+            Define the reference date. The numeric values would be parsed as number
+            of units (defined by `unit`) since this reference date.
+    
+            - If 'unix' (or POSIX) time; origin is set to 1970-01-01.
+            - If 'julian', unit must be 'D', and origin is set to beginning of
+              Julian Calendar. Julian day number 0 is assigned to the day starting
+              at noon on January 1, 4713 BC.
+            - If Timestamp convertible, origin is set to Timestamp identified by
+              origin.
+        cache : bool, default True
+            If True, use a cache of unique, converted dates to apply the datetime
+            conversion. May produce significant speed-up when parsing duplicate
+            date strings, especially ones with timezone offsets. The cache is only
+            used when there are at least 50 values. The presence of out-of-bounds
+            values will render the cache unusable and may slow down parsing.
+    
+            .. versionadded:: 0.23.0
+    
+            .. versionchanged:: 0.25.0
+                - changed default value from False to True.
+    
+        Returns
+        -------
+        datetime
+            If parsing succeeded.
+            Return type depends on input:
+    
+            - list-like: DatetimeIndex
+            - Series: Series of datetime64 dtype
+            - scalar: Timestamp
+    
+            In case when it is not possible to return designated types (e.g. when
+            any element of input is before Timestamp.min or after Timestamp.max)
+            return will have datetime.datetime type (or corresponding
+            array/Series).
+    
+        See Also
+        --------
+        DataFrame.astype : Cast argument to a specified dtype.
+        to_timedelta : Convert argument to timedelta.
+        convert_dtypes : Convert dtypes.
+    
+        Examples
+        --------
+        Assembling a datetime from multiple columns of a DataFrame. The keys can be
+        common abbreviations like ['year', 'month', 'day', 'minute', 'second',
+        'ms', 'us', 'ns']) or plurals of the same
+    
+        >>> df = pd.DataFrame({'year': [2015, 2016],
+        ...                    'month': [2, 3],
+        ...                    'day': [4, 5]})
+        >>> pd.to_datetime(df)
+        0   2015-02-04
+        1   2016-03-05
+        dtype: datetime64[ns]
+    
+        If a date does not meet the `timestamp limitations
+        <https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html
+        #timeseries-timestamp-limits>`_, passing errors='ignore'
+        will return the original input instead of raising any exception.
+    
+        Passing errors='coerce' will force an out-of-bounds date to NaT,
+        in addition to forcing non-dates (or non-parseable dates) to NaT.
+    
+        >>> pd.to_datetime('13000101', format='%Y%m%d', errors='ignore')
+        datetime.datetime(1300, 1, 1, 0, 0)
+        >>> pd.to_datetime('13000101', format='%Y%m%d', errors='coerce')
+        NaT
+    
+        Passing infer_datetime_format=True can often-times speedup a parsing
+        if its not an ISO8601 format exactly, but in a regular format.
+    
+        >>> s = pd.Series(['3/11/2000', '3/12/2000', '3/13/2000'] * 1000)
+        >>> s.head()
+        0    3/11/2000
+        1    3/12/2000
+        2    3/13/2000
+        3    3/11/2000
+        4    3/12/2000
+        dtype: object
+    
+        >>> %timeit pd.to_datetime(s, infer_datetime_format=True)  # doctest: +SKIP
+        100 loops, best of 3: 10.4 ms per loop
+    
+        >>> %timeit pd.to_datetime(s, infer_datetime_format=False)  # doctest: +SKIP
+        1 loop, best of 3: 471 ms per loop
+    
+        Using a unix epoch time
+    
+        >>> pd.to_datetime(1490195805, unit='s')
+        Timestamp('2017-03-22 15:16:45')
+        >>> pd.to_datetime(1490195805433502912, unit='ns')
+        Timestamp('2017-03-22 15:16:45.433502912')
+    
+        .. warning:: For float arg, precision rounding might happen. To prevent
+            unexpected behavior use a fixed-width exact type.
+    
+        Using a non-unix epoch origin
+    
+        >>> pd.to_datetime([1, 2, 3], unit='D',
+        ...                origin=pd.Timestamp('1960-01-01'))
+        DatetimeIndex(['1960-01-02', '1960-01-03', '1960-01-04'], dtype='datetime64[ns]', freq=None)
+        
+
+
+
+```python
+NumpyDocString(pd.to_datetime).render_md()
+```
+
+
+
+
+## to_datetime
+
+Convert argument to datetime.
+
+### Parameters
+
+| NAME                                                                   | TYPE                                                                           | DESCRIPTION                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+|:-----------------------------------------------------------------------|:-------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| arg                                                                    | int, float, str, datetime, list, tuple, 1-d array, Series, DataFrame/dict-like | The object to convert to a datetime.                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| errors                                                                 | {'ignore', 'raise', 'coerce'}, default 'raise'                                 | - If 'raise', then invalid parsing will raise an exception. - If 'coerce', then invalid parsing will be set as NaT. - If 'ignore', then invalid parsing will return the input.                                                                                                                                                                                                                                                                                                                                  |
+| dayfirst                                                               | bool, default False                                                            | Specify a date parse order if `arg` is str or its list-likes. If True, parses dates with the day first, eg 10/11/12 is parsed as 2012-11-10. Warning: dayfirst=True is not strict, but will prefer to parse with day first (this is a known bug, based on dateutil behavior).                                                                                                                                                                                                                                   |
+| yearfirst                                                              | bool, default False                                                            | Specify a date parse order if `arg` is str or its list-likes. <div><br></br></div>        - If True parses dates with the year first, eg 10/11/12 is parsed as 2010-11-12.                                                                                                                                                                                                                                                                                                                                      |
+| - If both dayfirst and yearfirst are True, yearfirst is preceded (same |                                                                                | as dateutil). <div><br></br></div>        Warning: yearfirst=True is not strict, but will prefer to parse with year first (this is a known bug, based on dateutil behavior).                                                                                                                                                                                                                                                                                                                                    |
+| utc                                                                    | bool, default None                                                             | Return UTC DatetimeIndex if True (converting any tz-aware datetime.datetime objects as well).                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| format                                                                 | str, default None                                                              | The strftime to parse time, eg "%d/%m/%Y", note that "%f" will parse all the way up to nanoseconds. See strftime documentation for more information on choices: https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior.                                                                                                                                                                                                                                                                 |
+| exact                                                                  | bool, True by default                                                          | Behaves as: - If True, require an exact format match. - If False, allow the format to match anywhere in the target string.                                                                                                                                                                                                                                                                                                                                                                                      |
+| unit                                                                   | str, default 'ns'                                                              | The unit of the arg (D,s,ms,us,ns) denote the unit, which is an integer or float number. This will be based off the origin. Example, with unit='ms' and origin='unix' (the default), this would calculate the number of milliseconds to the unix epoch start.                                                                                                                                                                                                                                                   |
+| infer_datetime_format                                                  | bool, default False                                                            | If True and no `format` is given, attempt to infer the format of the datetime strings based on the first non-NaN element, and if it can be inferred, switch to a faster method of parsing them. In some cases this can increase the parsing speed by ~5-10x.                                                                                                                                                                                                                                                    |
+| origin                                                                 | scalar, default 'unix'                                                         | Define the reference date. The numeric values would be parsed as number of units (defined by `unit`) since this reference date. <div><br></br></div>        - If 'unix' (or POSIX) time; origin is set to 1970-01-01. - If 'julian', unit must be 'D', and origin is set to beginning of Julian Calendar. Julian day number 0 is assigned to the day starting at noon on January 1, 4713 BC.                                                                                                                    |
+| - If Timestamp convertible, origin is set to Timestamp identified by   |                                                                                | origin.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| cache                                                                  | bool, default True                                                             | If True, use a cache of unique, converted dates to apply the datetime conversion. May produce significant speed-up when parsing duplicate date strings, especially ones with timezone offsets. The cache is only used when there are at least 50 values. The presence of out-of-bounds values will render the cache unusable and may slow down parsing. <div><br></br></div>        .. versionadded:: 0.23.0 <div><br></br></div>        .. versionchanged:: 0.25.0 - changed default value from False to True. |
+
+### Returns
+
+| TYPE     | DESCRIPTION                                                                                                                                                                                                                                                                                                                                                                     |
+|:---------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| datetime | If parsing succeeded. Return type depends on input: <br></br> - list-like: DatetimeIndex - Series: Series of datetime64 dtype - scalar: Timestamp <br></br> In case when it is not possible to return designated types (e.g. when any element of input is before Timestamp.min or after Timestamp.max) return will have datetime.datetime type (or corresponding array/Series). |
+
+### See Also
+
+DataFrame.astype : Cast argument to a specified dtype.
+to_timedelta : Convert argument to timedelta.
+convert_dtypes : Convert dtypes.
+
+
+### Examples
+
+Assembling a datetime from multiple columns of a DataFrame. The keys can be
+common abbreviations like ['year', 'month', 'day', 'minute', 'second',
+'ms', 'us', 'ns']) or plurals of the same
+
+```python
+>>> df = pd.DataFrame({'year': [2015, 2016],
+...                    'month': [2, 3],
+...                    'day': [4, 5]})
+>>> pd.to_datetime(df)
+0   2015-02-04
+1   2016-03-05
+dtype: datetime64[ns]
+
+```
+
+If a date does not meet the `timestamp limitations
+<https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html
+#timeseries-timestamp-limits>`_, passing errors='ignore'
+will return the original input instead of raising any exception.
+
+Passing errors='coerce' will force an out-of-bounds date to NaT,
+in addition to forcing non-dates (or non-parseable dates) to NaT.
+
+```python
+>>> pd.to_datetime('13000101', format='%Y%m%d', errors='ignore')
+datetime.datetime(1300, 1, 1, 0, 0)
+>>> pd.to_datetime('13000101', format='%Y%m%d', errors='coerce')
+NaT
+
+```
+
+Passing infer_datetime_format=True can often-times speedup a parsing
+if its not an ISO8601 format exactly, but in a regular format.
+
+```python
+>>> s = pd.Series(['3/11/2000', '3/12/2000', '3/13/2000'] * 1000)
+>>> s.head()
+0    3/11/2000
+1    3/12/2000
+2    3/13/2000
+3    3/11/2000
+4    3/12/2000
+dtype: object
+
+```
+
+```python
+>>> %timeit pd.to_datetime(s, infer_datetime_format=True)  # doctest: +SKIP
+100 loops, best of 3: 10.4 ms per loop
+
+```
+
+```python
+>>> %timeit pd.to_datetime(s, infer_datetime_format=False)  # doctest: +SKIP
+1 loop, best of 3: 471 ms per loop
+
+```
+
+Using a unix epoch time
+
+```python
+>>> pd.to_datetime(1490195805, unit='s')
+Timestamp('2017-03-22 15:16:45')
+>>> pd.to_datetime(1490195805433502912, unit='ns')
+Timestamp('2017-03-22 15:16:45.433502912')
+
+```
+
+.. warning:: For float arg, precision rounding might happen. To prevent
+unexpected behavior use a fixed-width exact type.
+
+Using a non-unix epoch origin
+
+```python
+>>> pd.to_datetime([1, 2, 3], unit='D',
+...                origin=pd.Timestamp('1960-01-01'))
+DatetimeIndex(['1960-01-02', '1960-01-03', '1960-01-04'], dtype='datetime64[ns]', freq=None)
+```
+
+
+

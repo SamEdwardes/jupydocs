@@ -7,9 +7,9 @@ module.exports = {
       items: [
         'getting_started', 
         'why_use_jupydocs',
+        'jupydocs_work_flow',
         'documenting_functions', 
-        'documenting_classes',
-        'jupydocs_work_flow'
+        'documenting_classes'
       ]
     },
     {

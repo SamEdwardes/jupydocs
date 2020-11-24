@@ -19,8 +19,6 @@ echo "-------------"
 jupyter nbconvert --to markdown --execute website/docs/usage_documenting_functions.ipynb
 echo "-------------"
 jupyter nbconvert --to markdown --execute website/docs/usage_documenting_classes.ipynb
-echo "-------------"
-jupyter nbconvert --to markdown --execute website/docs/usage_jupydocs_work_flow.ipynb
 
 #   API REFERENCE
 echo "-------------"
