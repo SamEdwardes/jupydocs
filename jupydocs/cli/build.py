@@ -3,21 +3,12 @@ A command line interface (CLI) for quickly converting ipynb files to markdown.
 """
 import os
 import subprocess
+import textwrap
 
 import plac
 
 
 @plac.annotations(
-    directories=plac.Annotation(
-        help="The directory to search for .ipynb files. The relative path to a\
-            .ipynb file can also be provided, in which case only that single\
-            file will be converted. By default '.' (current working directory).",
-        kind="positional",
-        abbrev=None,
-        type=str,
-        choices=None,
-        metavar=None,
-    ),
     walk=plac.Annotation(
         help="If flag is included `build` will search the provided directory\
              and all subdirectories for .ipynb files.",
@@ -36,34 +27,103 @@ import plac
         choices=None,
         metavar=None,
     ),
-    noinput=plac.Annotation(
-        help="If flag is included `build` will render all found .ipynb files\
-            with no input, meaning that only the output from the code blocks\
-            will be rendered to markdown.",
-        kind="flag",
+    no_input=plac.Annotation(
+        help="Specify if the markdown files should be rendered with or without\
+            the input code cells. Use 'i' to include the input or 'n' to not\
+            include the input. If multiple files are provided you can provide\
+            multiple characters matching the order of the file to convert. For\
+            example if you pass two .ipynb files to be converted you could\
+            include input for the first and not the second by passing 'in'.",
+        kind="option",
         abbrev="n",
-        type=bool,
+        type=str,
+        choices=None,
+        metavar=None,
+    ),
+    directories=plac.Annotation(
+        help="The directory to search for .ipynb files. The relative path to a\
+            .ipynb file can also be provided, in which case only that single\
+            file will be converted. By default '.' (current working directory).",
+        kind="positional",
+        abbrev=None,
+        type=str,
         choices=None,
         metavar=None,
     ),
 )
-def build(*directories, walk=False, old=False, noinput=False):
+def build(walk=False, old=False, no_input='i', *directories):
     """Convert .ipynb files to .md
 
     Converts .ipynb file to markdown. Only .ipynb files that have been changed
     since the last build will be converted unless otherwise specified.
+    
+    Examples
+    --------
+    # (1) run on all changed .ipynb files in current working directory
+    python -m jupydocs build .
+    
+    # (2) run on all changed .ipynb files in current working directory and
+    #     child directories
+    python -m jupydocs build . --walk
+    
+    # (3) run on all .ipynb files in current working directory and child
+    #     directories including files that have not been changed since the 
+    #     last build
+    python -m jupydocs build . --walk --old
+    
+    # (4) run on two specified files and do not include any input code
+    python -m jupydocs build README.ipynb website/docs/usage_getting_started.ipynb --no-input n
+    
+    # (5) run on two specified files and do not include any input code for the
+    #     first file but do include for the second file
+    python -m jupydocs build README.ipynb website/docs/usage_getting_started.ipynb --no-input ni
+    
+    # (6) run on all .ipynb files in the current working directory including
+    #     files that have not been changed since the last build
+    python -m jupydocs build . --old
     """
-    # find all of the ipynb and md files
-    if directory.endswith(".ipynb"):
-        files = [directory]
-    elif walk:
-        files = [os.path.join(r, file) for r, d, f in os.walk(directory) for file in f]
+    # objects to hold results
+    dirs = list(directories)
+    updated_docs = []
+    not_updated_docs = []
+    ipynb = []
+    
+    # find all of the ipynb
+    for directory in dirs:
+        if directory.endswith(".ipynb"):
+            files = [directory]
+        elif walk:
+            files = [os.path.join(r, file) for r, d, f in os.walk(directory) for file in f]
+        else:
+            files = os.listdir(directory)
+            files = [directory + '/' + f for f in files]
+        for f in files:
+            if f.endswith(".ipynb") and ".ipynb_checkpoints/" not in f:
+                ipynb.append(f)
+                
+    # print start
+    print("\n", ">" * 64, sep="")
+    print(f"Conversion starting! {len(ipynb)} .ipynb files detected.")
+    print(">" * 64)
+    
+    # validate that the arguments provided are correct.
+    # there are three possible outcomes:
+    # (1) only one input mapping was provided, so apply it to all files
+    # (2) the number of arguments provided to --no-input does not match the
+    #     number of .ipynb files
+    # (3) the number of arguments provided to --no-input does match the number
+    #     of .ipynb files
+    input_mapping = list(no_input)
+    if len(input_mapping) == 1:
+        input_mapping = input_mapping * len(ipynb)
+    elif len(input_mapping) != len(ipynb):
+        error_msg = (
+            f"The number of files provided ({len(ipynb)}) does not match the "
+            f"number of arguments provided to --no-input ({len(input_mapping)})."
+        )
+        raise ValueError(error_msg)
     else:
-        files = os.listdir(directory)
-        files = [directory + '/' + f for f in files]
-    ipynb = [f for f in files if f.endswith(".ipynb")]
-    ipynb = [f for f in ipynb if ".ipynb_checkpoints/" not in f]
-    md = [f for f in files if f.endswith(".md")]
+        pass
 
     # capture the time stamp the last time the file was run
     build_log = {}
@@ -76,19 +136,16 @@ def build(*directories, walk=False, old=False, noinput=False):
         }
 
     # build docs for docs that have been updated
-    updated_docs = []
-    not_updated_docs = []
-    for doc_name, doc_file in build_log.items():
+    for idx, (doc_name, doc_file) in enumerate(build_log.items()):
         ipynb_time = doc_file[doc_name + ".ipynb"]
         md_time = doc_file[doc_name + ".md"]
         if md_time < ipynb_time or old:
-            print("/" * 64)
+            print("\n", "/" * 32, sep='')
             print(f"Converting {doc_name}.ipynb to markdown.")
-            print("/" * 64)
             bash_command = (
                 f"jupyter nbconvert --to markdown --execute {doc_name}.ipynb"
             )
-            if noinput:
+            if input_mapping[idx] == 'n':
                 bash_command += ' --no-input'
             process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
             output, error = process.communicate()
@@ -97,7 +154,7 @@ def build(*directories, walk=False, old=False, noinput=False):
             not_updated_docs.append(f"\t - {doc_name}.ipynb")
 
     # results
-    print("=" * 64, "\n", "Summary of results\n", "=" * 64, sep="")
+    print("\n", "=" * 32, "\n", "Summary of results\n", "=" * 32, sep="")
     print(
         f"{len(updated_docs)} of {len(updated_docs) + len(not_updated_docs)} docs were built"
     )
@@ -107,6 +164,11 @@ def build(*directories, walk=False, old=False, noinput=False):
     print("NOT UPDATED:")
     for i in not_updated_docs:
         print(i)
+        
+    # print end
+    print("\n", "<" * 64, sep="")
+    print(f"Conversion complete! {len(updated_docs)} of {len(updated_docs) + len(not_updated_docs)} docs were built.")
+    print("<" * 64)
 
 
 def get_timestamp(x):
