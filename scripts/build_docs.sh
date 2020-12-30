@@ -1,33 +1,21 @@
-# inspired by https://github.com/pytorch/botorch/blob/master/scripts/build_docs.sh
+# Build docs by rendering .ipynb to .md
 # usage: poetry run bash scripts/build_docs.sh
-echo "-----------------------------------"
-echo "Convert .ipynb to markdown"
-echo "-----------------------------------"
 
-# GITHUB
-echo "-------------"
-jupyter nbconvert --to markdown --execute README.ipynb
+# include input
+python -m jupydocs build --no-input i \
+    README.ipynb \
+    website/docs/usage_getting_started.ipynb \
+    website/docs/usage_why_use_jupydocs.ipynb \
+    website/docs/usage_documenting_functions.ipynb \
+    website/docs/usage_documenting_classes.ipynb \
+    website/docs/api_reference_numpy_module.ipynb \
+    website/docs/testing_numpy.ipynb \
+    website/docs/testing_pandas.ipynb \
+    website/docs/testing_other.ipynb
 
-# DOCS
+# exclude input
+python -m jupydocs build --no-input n \
+    website/docs/api_reference_numpy_module.ipynb
 
-#   GETTING STARTED
-echo "-------------"
-jupyter nbconvert --to markdown --execute website/docs/usage_getting_started.ipynb
-echo "-------------"
-jupyter nbconvert --to markdown --execute website/docs/usage_why_use_jupydocs.ipynb
-echo "-------------"
-jupyter nbconvert --to markdown --execute website/docs/usage_documenting_functions.ipynb
-echo "-------------"
-jupyter nbconvert --to markdown --execute website/docs/usage_documenting_classes.ipynb
-
-#   API REFERENCE
-echo "-------------"
-jupyter nbconvert --to markdown --execute website/docs/api_reference_numpy_module.ipynb --no-input
-
-#   TESTING
-echo "-------------"
-jupyter nbconvert --to markdown --execute website/docs/testing_numpy.ipynb
-echo "-------------"
-jupyter nbconvert --to markdown --execute website/docs/testing_pandas.ipynb
-echo "-------------"
-jupyter nbconvert --to markdown --execute website/docs/testing_other.ipynb
+# render any other .ipynb files that were not included above
+python -m jupydocs build . --walk --no-input i
