@@ -17,7 +17,9 @@ module.exports = {
       label: 'API Reference',
       collapsed: false,
       items: [
-        'module_numpydocstring'
+        'numpydocstring.NumpyDocString',
+        'numpydocstring.render_class',
+        'cli'
       ]
     },
     {

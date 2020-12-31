@@ -1,6 +1,6 @@
 ---
-id: module_numpydocstring
-title: numpydocstring module
+id: numpydocstring.NumpyDocString
+title: numpydocstring.NumpyDocString
 ---
 Currently jupydocs works only with numpy doc strings. At this time some numpydoc strings may not work as expected because the library is still under development.
 
@@ -162,28 +162,6 @@ Render the docstring into a markdown format.
 | return_str | bool, optional | If true will return a string instead of markdown, by default False. |
 
 #### Returns
-
-| TYPE                            | DESCRIPTION                                       |
-|:--------------------------------|:--------------------------------------------------|
-| IPython.display.Markdown or str | The docstring rendered into markdown or a string. |
-
-
-
-
-
-
-## render_class
-
-Render an entire class into docstring markdown format
-
-### Parameters
-
-| NAME       | TYPE           | DESCRIPTION                                                         |
-|:-----------|:---------------|:--------------------------------------------------------------------|
-| obj        | Class          | A python class object                                               |
-| return_str | bool, optional | If true will return a string instead of markdown, by default False. |
-
-### Returns
 
 | TYPE                            | DESCRIPTION                                       |
 |:--------------------------------|:--------------------------------------------------|

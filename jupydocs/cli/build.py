@@ -52,35 +52,15 @@ import plac
     ),
 )
 def build(walk=False, old=False, no_input='i', *directories):
-    """Convert .ipynb files to .md
-
-    Converts .ipynb file to markdown. Only .ipynb files that have been changed
-    since the last build will be converted unless otherwise specified.
+    """ Converts `.ipynb` file to markdown. Only `.ipynb` files that have been
+    changed since the last build will be converted unless otherwise specified.
     
     Examples
     --------
-    # (1) run on all changed .ipynb files in current working directory
     python -m jupydocs build .
-    
-    # (2) run on all changed .ipynb files in current working directory and
-    #     child directories
     python -m jupydocs build . --walk
-    
-    # (3) run on all .ipynb files in current working directory and child
-    #     directories including files that have not been changed since the 
-    #     last build
     python -m jupydocs build . --walk --old
-    
-    # (4) run on two specified files and do not include any input code
-    python -m jupydocs build README.ipynb website/docs/usage_getting_started.ipynb --no-input n
-    
-    # (5) run on two specified files and do not include any input code for the
-    #     first file but do include for the second file
     python -m jupydocs build README.ipynb website/docs/usage_getting_started.ipynb --no-input ni
-    
-    # (6) run on all .ipynb files in the current working directory including
-    #     files that have not been changed since the last build
-    python -m jupydocs build . --old
     """
     # objects to hold results
     dirs = list(directories)
