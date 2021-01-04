@@ -13,13 +13,6 @@ All markdown documentation below was generated using jupydocs.
 
 Convert function docstrings into markdown documentation.
 
-### Parameters
-
-| NAME         | TYPE          | DESCRIPTION                                                    |
-|:-------------|:--------------|:---------------------------------------------------------------|
-| function     | function      | A python function that has been documented using numpy styling |
-| header_level | str, optional | [description], by default '##'                                 |
-
 ### Attributes
 
 | NAME                | TYPE   | DESCRIPTION   |
@@ -33,23 +26,35 @@ Convert function docstrings into markdown documentation.
 | docstring_split     | tbd    | tbd           |
 | header_level        | tbd    | tbd           |
 
-### Methods
-
-Work in progress
-
-
 ### Examples
 
 Work in progress
 
+### Methods
+ - [NumpyDocString.__init__](#NumpyDocString__init__)
+ - [NumpyDocString.create_doc_index](#NumpyDocStringcreate_doc_index)
+ - [NumpyDocString.find_section](#NumpyDocStringfind_section)
+ - [NumpyDocString.parse_code_blocks](#NumpyDocStringparse_code_blocks)
+ - [NumpyDocString.parse_description](#NumpyDocStringparse_description)
+ - [NumpyDocString.parse_generic](#NumpyDocStringparse_generic)
+ - [NumpyDocString.parse_parameters](#NumpyDocStringparse_parameters)
+ - [NumpyDocString.parse_returns](#NumpyDocStringparse_returns)
+ - [NumpyDocString.render_class](#NumpyDocStringrender_class)
+ - [NumpyDocString.render_md](#NumpyDocStringrender_md)
+
+### NumpyDocString.__init__
 
 
-## NumpyDocString methods
 
+#### Parameters
 
+| NAME         | TYPE          | DESCRIPTION                                                                                                         |
+|:-------------|:--------------|:--------------------------------------------------------------------------------------------------------------------|
+| function     | [type]        | [description]                                                                                                       |
+| header_level | str, optional | [description], by default '###'                                                                                     |
+| custom_name  | None | str    | If None will use the functions name. If a string as provided will use the provided string instead of a custom name. |
 
-
-### create_doc_index
+### NumpyDocString.create_doc_index
 
 Create an index of the docstring.
 
@@ -59,7 +64,7 @@ Create an index of the docstring.
 |:-------|:-----------------------------------------------------------------------------------------------------|
 | list   | A list of tuples, where each item in the list is a tuple with: (section_name, start_line, end_line). |
 
-### find_section
+### NumpyDocString.find_section
 
 A helper function that finds the section of docstring
 
@@ -76,7 +81,7 @@ A helper function that finds the section of docstring
 |:-----------|:------------------------------------------------------------|
 | (int, int) | A tuple with the start and end line of the desired section. |
 
-### parse_code_blocks
+### NumpyDocString.parse_code_blocks
 
 Identify and clean up code blocks.
 
@@ -92,7 +97,7 @@ Identify and clean up code blocks.
 |:-------|:------------------------------------------------------------------|
 | list   | The docstring with code strings formatted for markdown rendering. |
 
-### parse_description
+### NumpyDocString.parse_description
 
 Parse the description section of a docstring.
 
@@ -102,7 +107,7 @@ Parse the description section of a docstring.
 |:-------|:--------------|
 | [type] | [description] |
 
-### parse_generic
+### NumpyDocString.parse_generic
 
 Parse generic sections
 
@@ -118,7 +123,7 @@ Parse generic sections
 |:-------|:--------------|
 | [type] | [description] |
 
-### parse_parameters
+### NumpyDocString.parse_parameters
 
 Parse the paramters section of a docstring.
 
@@ -135,7 +140,7 @@ Parse the paramters section of a docstring.
 |:-------|:---------------------------------|
 | str    | A string in markdown formatting. |
 
-### parse_returns
+### NumpyDocString.parse_returns
 
 Parse the return section of a docstring
 
@@ -151,7 +156,24 @@ Parse the return section of a docstring
 |:-------|:--------------|
 | [type] | [description] |
 
-### render_md
+### NumpyDocString.render_class
+
+Render an entire class into docstring markdown format
+
+#### Parameters
+
+| NAME       | TYPE           | DESCRIPTION                                                         |
+|:-----------|:---------------|:--------------------------------------------------------------------|
+| obj        | Class          | A python class object                                               |
+| return_str | bool, optional | If true will return a string instead of markdown, by default False. |
+
+#### Returns
+
+| TYPE                            | DESCRIPTION                                       |
+|:--------------------------------|:--------------------------------------------------|
+| IPython.display.Markdown or str | The docstring rendered into markdown or a string. |
+
+### NumpyDocString.render_md
 
 Render the docstring into a markdown format.
 
