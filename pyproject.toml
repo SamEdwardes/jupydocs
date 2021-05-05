@@ -1,13 +1,21 @@
+[build-system]
+requires = [ "poetry-core>=1.0.0",]
+build-backend = "poetry.core.masonry.api"
+
 [tool.poetry]
 name = "jupydocs"
 version = "0.1.2"
 description = "Easy Python package documentation using markdown and jupyter"
-authors = ["SamEdwardes <edwardes.s@gmail.com>"]
+authors = [ "SamEdwardes <edwardes.s@gmail.com>",]
 license = "MIT"
 readme = "README.md"
 repository = "https://github.com/SamEdwardes/jupydocs"
 documentation = "https://jupydocs.netlify.app/"
-keywords = ["python", "docs", "documentation"]
+keywords = [ "python", "docs", "documentation",]
+
+[tool.jupydocs]
+keep-input = [ "website/docs/usage_getting_started.ipynb", "website/docs/usage_why_use_jupydocs.ipynb",]
+no-input = [ "website/docs/api_reference_numpy_module.ipynb",]
 
 [tool.poetry.dependencies]
 python = "^3.7"
@@ -24,7 +32,3 @@ pytest = "^6.1.2"
 pandas = "^1.1.4"
 nbformat = "^5.0.8"
 nbconvert = "^6.0.7"
-
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
