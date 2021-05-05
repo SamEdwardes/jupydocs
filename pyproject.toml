@@ -13,6 +13,9 @@ keywords = ["python", "docs", "documentation"]
 python = "^3.7"
 ipython = "^7.19.0"
 tabulate = "^0.8.7"
+rich = "^10.1.0"
+typer = "^0.3.2"
+tomlkit = "^0.7.0"
 
 [tool.poetry.dev-dependencies]
 jupyterlab = "^2.2.9"
