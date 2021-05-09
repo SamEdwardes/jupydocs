@@ -49,8 +49,6 @@ def add(
     """
     Add new .ipynb files for jupydocs to build.
     """
-    inspect(files_to_add)
-    inspect(pyproject_toml_path)
     files_to_add = list(set(files_to_add))
     files_to_add.sort()
     console.print(f"[bold]Adding {len(files_to_add)} docs to build list")
@@ -62,7 +60,6 @@ def add(
             create_ipynb(file)
 
     path, pyproject = parse_pyproject_toml(pyproject_toml_path)
-    inspect(path)
 
     if no_input:
         key = "no-input"
@@ -132,12 +129,14 @@ def remove(
 
 
 @app.command()
-def convert():
+def convert(
+    pyproject_toml_path: str = typer.Option("pyproject.toml", help=help_text_pyproject_toml_path)
+):
     """
     Convert .ipynb files to .md.
     """
     # Get data from pyproject.toml
-    _, pyproject = parse_pyproject_toml()
+    _, pyproject = parse_pyproject_toml(pyproject_toml_path)
     ipynb_files_keep_input = pyproject["tool"]["jupydocs"]["keep-input"]
     ipynb_files_no_input = pyproject["tool"]["jupydocs"]["no-input"]
 
