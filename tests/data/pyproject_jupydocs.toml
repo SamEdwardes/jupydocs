@@ -1,0 +1,2 @@
+[tool.jupydocs]
+keep-input = [ "test.ipynb",]
