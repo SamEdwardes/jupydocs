@@ -14,7 +14,7 @@ documentation = "https://jupydocs.netlify.app/"
 keywords = [ "python", "docs", "documentation",]
 
 [tool.jupydocs]
-keep-input = [ "README.ipynb", "website/docs/usage_documenting_classes.ipynb", "website/docs/usage_documenting_functions.ipynb", "website/docs/usage_getting_started.ipynb", "website/docs/usage_why_use_jupydocs.ipynb",]
+keep-input = [ "README.ipynb", "website/blog/2021-05-10-jupydocs-cli.ipynb", "website/docs/usage_documenting_classes.ipynb", "website/docs/usage_documenting_functions.ipynb", "website/docs/usage_getting_started.ipynb", "website/docs/usage_why_use_jupydocs.ipynb",]
 no-input = [ "website/docs/api_reference_numpy_module.ipynb",]
 
 [tool.poetry.dependencies]
@@ -32,3 +32,6 @@ pytest = "^6.1.2"
 pandas = "^1.1.4"
 nbformat = "^5.0.8"
 nbconvert = "^6.0.7"
+
+[tool.poetry.scripts]
+jupydocs = "jupydocs.cli:app"
