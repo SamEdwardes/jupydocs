@@ -13,17 +13,13 @@ repository = "https://github.com/SamEdwardes/jupydocs"
 documentation = "https://jupydocs.netlify.app/"
 keywords = [ "python", "docs", "documentation",]
 
-[tool.jupydocs]
-keep-input = [ "README.ipynb", "website/docs/usage_documenting_classes.ipynb", "website/docs/usage_documenting_functions.ipynb", "website/docs/usage_getting_started.ipynb", "website/docs/usage_why_use_jupydocs.ipynb",]
-no-input = [ "website/docs/api_reference_numpy_module.ipynb",]
-
 [tool.poetry.dependencies]
 python = "^3.7"
 ipython = "^7.19.0"
 tabulate = "^0.8.7"
 rich = "^10.1.0"
 typer = "^0.3.2"
-toml = "^0.10.2"
+tomlkit = "^0.7.0"
 
 [tool.poetry.dev-dependencies]
 jupyterlab = "^2.2.9"
