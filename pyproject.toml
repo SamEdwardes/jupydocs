@@ -32,3 +32,16 @@ typer-cli = "^0.0.11"
 
 [tool.poetry.scripts]
 jupydocs = "jupydocs.cli:app"
+
+[tool.jupydocs]
+[tool.jupydocs.docs]
+"website/docs/api_reference_numpy_module.ipynb" = {output-style = "no-input", output-directory = "website/docs/api_reference_numpy_module.ipynb"}
+"README.ipynb" = {output-style = "keep-input", output-directory = "README.ipynb"}
+"website/docs/testing_numpy.ipynb" = {output-style = "keep-input", output-directory = "website/docs/testing_numpy.ipynb"}
+"website/docs/testing_other.ipynb" = {output-style = "keep-input", output-directory = "website/docs/testing_other.ipynb"}
+"website/docs/testing_pandas.ipynb" = {output-style = "keep-input", output-directory = "website/docs/testing_pandas.ipynb"}
+"website/docs/usage_documenting_classes.ipynb" = {output-style = "keep-input", output-directory = "website/docs/usage_documenting_classes.ipynb"}
+"website/docs/usage_documenting_functions.ipynb" = {output-style = "keep-input", output-directory = "website/docs/usage_documenting_functions.ipynb"}
+"website/docs/usage_getting_started.ipynb" = {output-style = "keep-input", output-directory = "website/docs/usage_getting_started.ipynb"}
+"website/docs/usage_why_use_jupydocs.ipynb" = {output-style = "keep-input", output-directory = "website/docs/usage_why_use_jupydocs.ipynb"}
+

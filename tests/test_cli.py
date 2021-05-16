@@ -1,4 +1,4 @@
-from collections import defaultdict
+import tomlkit
 
 from jupydocs.cli import parse_pyproject_toml
 
@@ -9,7 +9,7 @@ def test_no_parse_pyproject_toml():
     be created.
     """
     _, pyproject = parse_pyproject_toml("tests/data/does_not_exist.toml")
-    assert isinstance(pyproject['tool']['jupydocs'], defaultdict)
+    assert isinstance(pyproject['tool']['jupydocs'], tomlkit.items.Table)
 
 
 def test_empty_parse_pyproject_toml():
@@ -18,7 +18,7 @@ def test_empty_parse_pyproject_toml():
     data is added.
     """
     _, pyproject = parse_pyproject_toml("tests/data/pyproject_empty.toml")
-    assert isinstance(pyproject['tool']['jupydocs'], defaultdict)
+    assert isinstance(pyproject['tool']['jupydocs'], tomlkit.items.Table)
 
 
 def test_jupydocs_parse_pyproject_toml():
@@ -27,8 +27,8 @@ def test_jupydocs_parse_pyproject_toml():
     it is not overwritten.
     """
     _, pyproject = parse_pyproject_toml("tests/data/pyproject_jupydocs.toml")
-    assert isinstance(pyproject['tool']['jupydocs'], defaultdict)
-    assert pyproject['tool']['jupydocs']['keep-input'] == ['test.ipynb']
+    assert isinstance(pyproject['tool']['jupydocs'], tomlkit.items.Table)
+    assert pyproject['tool']['jupydocs']['docs']['test.ipynb'] == {"output-style": "keep-input", "output-directory": "test.ipynb"}
 
 
 def test_tool_parse_pyproject_toml():
@@ -37,7 +37,7 @@ def test_tool_parse_pyproject_toml():
     that it is not overwritten.
     """
     _, pyproject = parse_pyproject_toml("tests/data/pyproject_tool.toml")
-    assert isinstance(pyproject['tool']['jupydocs'], defaultdict)
+    assert isinstance(pyproject['tool']['jupydocs'], tomlkit.items.Table)
     assert 'poetry' in pyproject['tool']
     assert pyproject['tool']['poetry']['dependencies']['python'] == "^3.7"
     assert 'jupydocs' in pyproject['tool']
@@ -50,4 +50,4 @@ def test_no_tool_parse_pyproject_toml():
     that it is added correctly.
     """
     _, pyproject = parse_pyproject_toml("tests/data/pyproject_no_tool.toml")
-    assert isinstance(pyproject['tool']['jupydocs'], defaultdict)
+    assert isinstance(pyproject['tool']['jupydocs'], tomlkit.items.Table)

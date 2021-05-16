@@ -12,10 +12,11 @@ import subprocess
 from collections import defaultdict
 from typing import List
 
-import toml
 import typer
 from rich import inspect
 from rich.console import Console
+import tomlkit
+
 
 app = typer.Typer()
 console = Console()
@@ -61,27 +62,29 @@ def add(
 
     path, pyproject = parse_pyproject_toml(pyproject_toml_path)
 
+    original_file_list = list(pyproject["tool"]["jupydocs"]["docs"].keys())
+    all_files = original_file_list + files_to_add
+    all_files = list(set(all_files))
+    all_files.sort()
+
     if no_input:
-        key = "no-input"
+        output_style = "no-input"
     else:
-        key = "keep-input"
+        output_style = "keep-input"
 
-    original_file_list = pyproject["tool"]["jupydocs"][key].copy()
-    file_list = pyproject["tool"]["jupydocs"][key]
-    file_list += files_to_add
-    file_list = list(set(file_list))
-    file_list.sort()
-    pyproject["tool"]["jupydocs"][key] = file_list
-
-    console.print(f"[bold]Changes to \[tool.jupydocs] `{key}`:")  # noqa: W605
-    for file in file_list:
-        if file in files_to_add and file not in original_file_list:
-            console.print(f"[bold green]+ {file}")
+    console.print("[bold]Changes to \[tool.jupydocs.docs]:")  # noqa: W605
+    for file in all_files:
+        if file in original_file_list:
+            console.print(f"  ~ {file}")
         else:
-            console.print(f"~ {file}")
+            console.print(f"  [bold green]+ {file}")
+            file_table = tomlkit.inline_table()
+            file_table["output-style"] = output_style
+            file_table["output-directory"] = file
+            pyproject["tool"]["jupydocs"]["docs"][file] = file_table
 
     with open(path, "w") as f:
-        toml.dump(pyproject, f)
+        f.write(tomlkit.dumps(pyproject))
 
 
 @app.command()
@@ -100,32 +103,28 @@ def remove(
 
     path, pyproject = parse_pyproject_toml(pyproject_toml_path)
 
-    if no_input:
-        key = "no-input"
-    else:
-        key = "keep-input"
+    original_files = list(pyproject["tool"]["jupydocs"]["docs"].keys())
+    all_files = list(set(original_files + files_to_remove))
+    all_files.sort()
 
     # Validate that the files provided exist in pyproject.toml. If they do not
     # warn the user.
     files_to_remove.sort()
     for file in files_to_remove:
-        if file not in pyproject["tool"]["jupydocs"][key]:
-            console.print(
-                f"[yellow]Warning: [bold]{file}[/bold] not in pyproject.toml"
-            )
+        if file not in original_files:
+            console.print(f"[yellow]Warning: [bold]{file}[/bold] not in pyproject.toml")
 
-    console.print(f"[bold]Changes to \[tool.jupydocs] `{key}`:")  # noqa: W605
-    files_to_keep = []
-    for file in pyproject["tool"]["jupydocs"][key]:
-        if file in files_to_remove:
-            console.print(f"[bold red]- {file}")
-        else:
-            files_to_keep.append(file)
-            console.print(f"~ {file}")
+    console.print("[bold]Changes to \[tool.jupydocs.docs]:")  # noqa: W605
 
-    pyproject["tool"]["jupydocs"][key] = files_to_keep
+    for file in all_files:
+        if file in files_to_remove and file in original_files:
+            console.print(f"  [bold red]- {file}")
+            del pyproject["tool"]["jupydocs"]["docs"][file]
+        elif file in original_files:
+            console.print(f"  ~ {file}")
+
     with open(path, "w") as f:
-        toml.dump(pyproject, f)
+        f.write(tomlkit.dumps(pyproject))
 
 
 @app.command()
@@ -137,30 +136,56 @@ def convert(
     """
     # Get data from pyproject.toml
     _, pyproject = parse_pyproject_toml(pyproject_toml_path)
-    ipynb_files_keep_input = pyproject["tool"]["jupydocs"]["keep-input"]
-    ipynb_files_no_input = pyproject["tool"]["jupydocs"]["no-input"]
-
-    # Only attempt to convert files that exist
-    ipynb_dict = {
-        "keep-input": [i for i in ipynb_files_keep_input if os.path.isfile(i)],
-        "no-input": [i for i in ipynb_files_no_input if os.path.isfile(i)],
-    }
-
-    num_files = len(ipynb_dict["keep-input"]) + len(ipynb_dict["no-input"])
-    console.print(f"[bold]Converting {num_files} docs")
-
+    
     with console.status("Converting docs from .ipynb to .md", spinner="runner"):
-        for key, files in ipynb_dict.items():
-            flag = "--no-input" if key == "no-input" else ""
-            for ipynb in files:
-                p = os.path.normpath(ipynb)
+        for file, data in pyproject["tool"]["jupydocs"]["docs"].items():
+            if not os.path.isfile:
+                console.print(f"[yellow]Warning: [bold]{file}[/bold] does not exist.")
+            else:
+                flag = "--no-input" if data["output-style"] == "no-input" else ""
+                p = os.path.normpath(file)
                 bash_command = f"jupyter nbconvert --to markdown --execute {p} {flag}"
                 console.log(f"{p}")
                 process = subprocess.run(bash_command.split(), capture_output=True)
+                if process.returncode == 1:
+                    console.print(f"[red]Error: {p} failed to convert.")
 
-    console.print(
-        f"[bold green]Successfully converted {num_files} .ipynb files to .md"
-    )  # noqa: E501
+    console.print(f"[bold green]Complete!")
+    
+
+@app.command()
+def show(
+    pyproject_toml_path: str = typer.Option("pyproject.toml", help=help_text_pyproject_toml_path)
+):
+    """
+    Show currenty jupydocs settings.
+    """
+    _, pyproject = parse_pyproject_toml(pyproject_toml_path)
+    console.print(dict(pyproject["tool"]["jupydocs"]["docs"]))
+
+
+@app.command()
+def clear(
+    pyproject_toml_path: str = typer.Option("pyproject.toml", help=help_text_pyproject_toml_path),
+    do_not_prompt: bool = typer.Option(False, help="Skip the user prompt?")
+):
+    """
+    Show currenty jupydocs settings.
+    """
+    console.print("[yellow]Warning: `clear` will delete all contents in \[tool.jupydocs.docs].")
+    
+    if do_not_prompt:
+        run_clear = "yes"
+    else:
+        run_clear = typer.prompt("Are you sure you want to continue?[yes/no]")
+    
+    if run_clear.lower()[0] == "y":
+        path, pyproject = parse_pyproject_toml(pyproject_toml_path)
+    
+        pyproject["tool"]["jupydocs"]["docs"] = tomlkit.table()
+        
+        with open(path, "w") as f:
+            f.write(tomlkit.dumps(pyproject))
 
 
 def parse_pyproject_toml(path: str = "pyproject.toml") -> dict:
@@ -170,34 +195,25 @@ def parse_pyproject_toml(path: str = "pyproject.toml") -> dict:
     # Check to see if a pyproject.toml exists. If one does not exist create a
     # new file with the boilerplate for jupydocs.
     if not os.path.isfile(path):
-        console.print(
-            "[yellow]Warning: no [bold]pyproject.toml[/bold] file found. Creating a new one."
-        )  # noqa: E501
-        pyproject = {"tool": {"jupydocs": defaultdict(list)}}
+        console.print("[yellow]Warning: no [bold]pyproject.toml[/bold] file found. Creating a new one.")  # noqa: E501 # fmt: off
+        pyproject = tomlkit.document()
     else:
-        pyproject = toml.load(path)
+        with open(path, 'r') as f:
+            pyproject = tomlkit.parse(f.read())
 
-    # Check to see if there is a `tool` section in the toml file. If not
-    # create one.
+    # Check to see if the [tool] table exists.
     if "tool" not in pyproject:
-        console.print(
-            "[yellow]Warning: no [bold]\[tool.jupydocs][/bold] section found in pyproject.toml. Creating section."  # noqa: W605
-        )  # noqa: E501
-        pyproject["tool"] = {"jupydocs": defaultdict(list)}
+        pyproject["tool"] = tomlkit.table()
 
-    # Check if there is any jupydocs data in pyproject.toml. If not add the
-    # jupydocs meta data.
+    # Check to see if [tool.jupydocs] table exists.
     if "jupydocs" not in pyproject["tool"]:
-        console.print(
-            "[yellow]Warning: no [bold]\[tool.jupydocs][/bold] section found in pyproject.toml. Creating section."  # noqa: W605
-        )  # noqa: E501
-        pyproject["tool"]["jupydocs"] = defaultdict(list)
+        pyproject["tool"]["jupydocs"] = tomlkit.table()
 
-    # Parse the jupydocs meta data and turn into a deafultdict so it will be
-    # easy to append more items.
-    jupydocs_data = pyproject["tool"]["jupydocs"]
-    jupydocs_data = defaultdict(list, jupydocs_data)
-    pyproject["tool"]["jupydocs"] = jupydocs_data
+    warning_text = "[yellow]Warning: creating [bold]\[tool.jupydocs.docs][/bold] in pyproject.toml."  # noqa: E501 W605
+    # Check to see if [tool.jupydocs.docs] table exists
+    if "docs" not in pyproject["tool"]["jupydocs"]:
+        console.print(warning_text)
+        pyproject["tool"]["jupydocs"]["docs"] = tomlkit.table()
 
     return path, pyproject
 
