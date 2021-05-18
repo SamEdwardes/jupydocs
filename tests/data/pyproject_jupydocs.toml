@@ -1,0 +1,2 @@
+[tool.jupydocs.docs]
+"test.ipynb" = {output-style = "keep-input", output-directory = "test.ipynb"}

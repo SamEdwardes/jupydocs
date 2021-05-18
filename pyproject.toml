@@ -1,18 +1,25 @@
+[build-system]
+requires = [ "poetry-core>=1.0.0",]
+build-backend = "poetry.core.masonry.api"
+
 [tool.poetry]
 name = "jupydocs"
 version = "0.1.2"
 description = "Easy Python package documentation using markdown and jupyter"
-authors = ["SamEdwardes <edwardes.s@gmail.com>"]
+authors = [ "SamEdwardes <edwardes.s@gmail.com>",]
 license = "MIT"
 readme = "README.md"
 repository = "https://github.com/SamEdwardes/jupydocs"
 documentation = "https://jupydocs.netlify.app/"
-keywords = ["python", "docs", "documentation"]
+keywords = [ "python", "docs", "documentation",]
 
 [tool.poetry.dependencies]
 python = "^3.7"
 ipython = "^7.19.0"
 tabulate = "^0.8.7"
+rich = "^10.1.0"
+typer = "^0.3.2"
+tomlkit = "^0.7.0"
 
 [tool.poetry.dev-dependencies]
 jupyterlab = "^2.2.9"
@@ -21,7 +28,20 @@ pytest = "^6.1.2"
 pandas = "^1.1.4"
 nbformat = "^5.0.8"
 nbconvert = "^6.0.7"
+typer-cli = "^0.0.11"
 
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+[tool.poetry.scripts]
+jupydocs = "jupydocs.cli:app"
+
+[tool.jupydocs]
+[tool.jupydocs.docs]
+"website/docs/api_reference_numpy_module.ipynb" = {output-style = "no-input", output-directory = "website/docs/api_reference_numpy_module.ipynb"}
+"README.ipynb" = {output-style = "keep-input", output-directory = "README.ipynb"}
+"website/docs/testing_numpy.ipynb" = {output-style = "keep-input", output-directory = "website/docs/testing_numpy.ipynb"}
+"website/docs/testing_other.ipynb" = {output-style = "keep-input", output-directory = "website/docs/testing_other.ipynb"}
+"website/docs/testing_pandas.ipynb" = {output-style = "keep-input", output-directory = "website/docs/testing_pandas.ipynb"}
+"website/docs/usage_documenting_classes.ipynb" = {output-style = "keep-input", output-directory = "website/docs/usage_documenting_classes.ipynb"}
+"website/docs/usage_documenting_functions.ipynb" = {output-style = "keep-input", output-directory = "website/docs/usage_documenting_functions.ipynb"}
+"website/docs/usage_getting_started.ipynb" = {output-style = "keep-input", output-directory = "website/docs/usage_getting_started.ipynb"}
+"website/docs/usage_why_use_jupydocs.ipynb" = {output-style = "keep-input", output-directory = "website/docs/usage_why_use_jupydocs.ipynb"}
+
